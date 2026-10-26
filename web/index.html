@@ -258,7 +258,7 @@ function modeCardHTML(set){
     +'<button data-act="mode" data-m="latihan" class="'+(mode[set]==='latihan'?'on':'')+'">💡 Mode Latihan</button>'
     +'</div><p class="howtxt">'
     +(mode[set]==='ujian'
-      ?'🎙️ Mode Ujian: jawaban tidak langsung dibenarkan — pakai 🤔 Ragu & ⏭ Skip, lalu 💾 Selesai & Rekap.'
+      ?'🎙️ Mode Ujian: 🤔 Ragu & ⏭ Skip hanya penanda — Selesai & Rekap aktif saat SEMUA soal sudah pakem (tanpa kosong/skip/ragu).'
       :'💚 Mode Latihan: PG langsung tahu hasil di-tap; PGK lewat tombol 🔑 Cek Kunci.')
     +'</p></div>';
 }
@@ -355,6 +355,11 @@ function handleClick(e){
 function setMode(set,m){if(mode[set]!==m){mode[set]=m;done[set]=false;render(set);}}
 function finish(set){
   if(done[set]){toast('Sudah selesai — pakai Salin jawaban atau Reset');return;}
+  const x=stats(set);
+  if(x.jaw<x.tot||x.rag>0||x.skp>0){
+    toast('Belum bisa selesai — belum pakem: '+(x.tot-x.jaw)+' belum dijawab'+(x.skp?' · '+x.skp+' skip':'')+(x.rag?' · '+x.rag+' ragu':'')+'. Isi semua dulu!');
+    return;
+  }
   if(!confirm('Selesaikan simulasi ini dan lihat rekap semua jawaban?'))return;
   flat(set).forEach(it=>stof(set,it.q.no).rv=true);
   done[set]=true;render(set);toast('Selesai! Skor + pembahasan siap 📊');window.scrollTo(0,0);
@@ -366,7 +371,7 @@ function stats(set){
     const st=stof(set,it.q.no),q=it.q,f=formOf(q);
     if(st.r)rag++;
     if(f==='kategori'){
-      if(st.p.every(x=>x>=0)){
+      if(q.rws.every((_,ri)=>(st.p[ri]??-1)>=0)){
         jaw++;
         (q.krow.every((k,i)=>st.p[i]===k))?ben++:sal++;
       }else if(st.s)skp++;
