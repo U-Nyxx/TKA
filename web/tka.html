@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latihan TKA 2026 — B. Indonesia</title>
+<style>
+  :root{
+    /* Neumorphism tokens — sumber: ui-ux-pro-max styles.csv #85 (Merah🐂 Clay) */
+    --bg:#E0E5EC;
+    --surf1:#E4EAF1; --surf2:#D9E0E9;
+    --inset:#D6DDE6;
+    --shL:rgba(255,255,255,.78);
+    --shD:rgba(163,177,198,.66);
+    --txt:#2F3844; --mut:#5B6470;
+    --acc:#6C63FF; --accD:#4A42CC;
+    --ok:#1F7A46; --no:#C22237; --gold:#B3740A;
+    --r16:16px; --r14:14px; --rpill:999px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:104px;
+    -webkit-tap-highlight-color:transparent}
+  /* ===== Neumorph utama ===== */
+  .nm{background:linear-gradient(145deg,var(--surf1),var(--surf2));border-radius:var(--r16);
+    box-shadow:6px 6px 12px var(--shD),-6px -6px 12px var(--shL)}
+  .nm-in{background:var(--inset);border-radius:var(--r14);
+    box-shadow:inset 4px 4px 8px var(--shD),inset -4px -4px 8px var(--shL)}
+  header{padding:16px 16px 4px;text-align:center}
+  header .logo{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:var(--rpill);
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));box-shadow:5px 5px 10px var(--shD),-5px -5px 10px var(--shL)}
+  header .logo span{font-weight:800;color:var(--accD);font-size:1.02rem;letter-spacing:-.2px}
+  header p{margin:8px 0 0;font-size:.8rem;color:var(--mut)}
+  header p b{color:var(--accD)}
+  nav{display:flex;gap:10px;padding:12px 14px;position:sticky;top:0;background:var(--bg);z-index:5;border-radius:0 0 18px 18px}
+  nav button{flex:1;padding:11px 4px;border:0;border-radius:var(--r14);background:linear-gradient(145deg,var(--surf1),var(--surf2));
+    box-shadow:4px 4px 9px var(--shD),-4px -4px 9px var(--shL);color:var(--mut);font-size:.82rem;font-weight:700;cursor:pointer;
+    transition:box-shadow .15s, transform .15s, color .15s; font-family:inherit}
+  nav button:active{transform:scale(.97);box-shadow:inset 3px 3px 7px var(--shD),inset -3px -3px 7px var(--shL)}
+  nav button.on{color:var(--accD);box-shadow:inset 4px 4px 8px var(--shD),inset -4px -4px 8px var(--shL);background:var(--inset)}
+  main{max-width:740px;margin:0 auto;padding:10px 14px 20px}
+  section{animation:secIn .3s cubic-bezier(.2,.7,.3,1)}
+  .card{background:linear-gradient(145deg,var(--surf1),var(--surf2));border-radius:var(--r16);padding:16px;margin:14px 0;
+    box-shadow:6px 6px 12px var(--shD),-6px -6px 12px var(--shL);
+    opacity:0;animation:riseIn .45s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--i,0)*45ms)}
+  .topic{border-radius:18px}
+  .topic h3{margin:0 0 8px;font-size:.98rem;color:var(--accD);letter-spacing:-.2px}
+  .topic.pgk h3{color:var(--gold)}
+  .topic p{margin:8px 0;font-size:.94rem}
+  .howbar{display:flex;gap:10px;margin:2px 0 0}
+  .howbar button{flex:1;padding:10px 4px;border:0;border-radius:var(--r14);
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));box-shadow:4px 4px 9px var(--shD),-4px -4px 9px var(--shL);
+    color:var(--mut);font-weight:800;font-size:.8rem;cursor:pointer;transition:all .15s;font-family:inherit}
+  .howbar button:active{transform:scale(.97)}
+  .howbar button.on{color:var(--accD);background:var(--inset);box-shadow:inset 4px 4px 8px var(--shD),inset -4px -4px 8px var(--shL)}
+  .howtxt{font-size:.79rem;color:var(--mut);margin:10px 2px 0}
+  /* ===== Soal ===== */
+  .q{background:linear-gradient(145deg,var(--surf1),var(--surf2));border-radius:16px;padding:14px;margin:12px 0;
+    box-shadow:5px 5px 11px var(--shD),-5px -5px 11px var(--shL);
+    opacity:0;animation:riseIn .45s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--i,0)*38ms)}
+  .q.skipec{opacity:.55}
+  .q .stem{font-weight:600;margin:8px 0 10px;font-size:.97rem}
+  .chip{display:inline-block;font-size:.66rem;padding:3px 10px;border-radius:var(--rpill);font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+    background:var(--inset);box-shadow:inset 2px 2px 5px var(--shD),inset -2px -2px 5px var(--shL);color:var(--accD)}
+  .chip.pgkc{color:var(--gold)}
+  .qno{font-size:.79rem;color:var(--mut);font-weight:800;margin-left:7px}
+  .badge{display:inline-block;font-size:.67rem;font-weight:800;padding:3px 9px;border-radius:var(--rpill);margin-left:5px;animation:pop .26s cubic-bezier(.34,1.56,.64,1) both}
+  .badge.ragu{color:var(--gold);background:var(--inset);box-shadow:inset 2px 2px 5px var(--shD),inset -2px -2px 5px var(--shL)}
+  .badge.skip{color:var(--mut);background:var(--inset);box-shadow:inset 2px 2px 5px var(--shD),inset -2px -2px 5px var(--shL)}
+  .opt{display:flex;gap:11px;align-items:center;width:100%;text-align:left;padding:11px 13px;margin:8px 0;border:0;border-radius:var(--r14);
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));
+    box-shadow:4px 4px 8px var(--shD),-4px -4px 8px var(--shL);
+    color:var(--txt);font-size:.94rem;cursor:pointer;transition:box-shadow .15s, transform .15s, background .15s;font-family:inherit}
+  .opt:active{transform:scale(.97);box-shadow:inset 3px 3px 6px var(--shD),inset -3px -3px 6px var(--shL)}
+  .opt .key{min-width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:800;font-size:.85rem;
+    color:var(--accD);background:var(--inset);box-shadow:inset 2px 2px 4px var(--shD),inset -2px -2px 4px var(--shL);flex:none}
+  .opt.pick{background:var(--inset);box-shadow:inset 3px 3px 7px var(--shD),inset -3px -3px 7px var(--shL)}
+  .opt.ok{box-shadow:inset 0 0 0 2px var(--ok),inset 3px 3px 7px var(--shD)}
+  .opt.ok .key{color:#fff;background:var(--ok);box-shadow:none}
+  .opt.no{box-shadow:inset 0 0 0 2px var(--no),inset 3px 3px 7px var(--shD)}
+  .opt.no .key{color:#fff;background:var(--no);box-shadow:none}
+  .opt.gold{box-shadow:inset 0 0 0 2px var(--gold),inset 3px 3px 7px var(--shD)}
+  .opt.gold .key{color:#fff;background:var(--gold);box-shadow:none}
+  .opt:disabled{cursor:default}
+  /* kategori rows */
+  .row{display:flex;gap:8px;align-items:center;display:flex;width:100%;margin:7px 0;padding:9px 10px;border-radius:var(--r14);
+    background:var(--inset);box-shadow:inset 3px 3px 6px var(--shD),inset -3px -3px 6px var(--shL)}
+  .row .st{flex:1;font-size:.9rem}
+  .row .ax{display:flex;gap:6px}
+  .row .ax button{padding:7px 11px;border:0;border-radius:var(--rpill);font-weight:800;font-size:.72rem;cursor:pointer;
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));box-shadow:3px 3px 6px var(--shD),-3px -3px 6px var(--shL);
+    color:var(--mut);transition:all .15s;font-family:inherit}
+  .row .ax button:active{transform:scale(.94)}
+  .row .ax button.sel{color:#fff;background:var(--acc);box-shadow:none}
+  .row.ok .ax button.sel{background:var(--ok)}
+  .row.no .ax button.sel{background:var(--no)}
+  .row .ax button.goldx{color:#fff;background:var(--gold);box-shadow:none}
+  .actc{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
+  .actc button{padding:9px 14px;border:0;border-radius:var(--r14);color:var(--mut);font-weight:800;font-size:.78rem;cursor:pointer;
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));box-shadow:4px 4px 8px var(--shD),-4px -4px 8px var(--shL);transition:all .15s;font-family:inherit}
+  .actc button:active{transform:scale(.97);box-shadow:inset 3px 3px 6px var(--shD),inset -3px -3px 6px var(--shL)}
+  .actc button.onr{color:var(--gold)}
+  .actc button.onsk{color:var(--txt)}
+  .actc button.cek{color:var(--accD)}
+  .actc button:disabled{opacity:.45;cursor:default}
+  .bahas{margin-top:12px;padding:12px 14px;border-radius:var(--r14);background:var(--inset);
+    box-shadow:inset 3px 3px 7px var(--shD),inset -3px -3px 7px var(--shL);font-size:.85rem;color:var(--txt);animation:fadeDown .28s ease both}
+  .bahas b{color:var(--accD)}
+  .kbk{font-size:.72rem;color:var(--mut);margin:2px 0 6px}
+  /* ===== bar bawah ===== */
+  .bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 18px var(--shD);padding:12px 14px;display:flex;flex-wrap:wrap;gap:9px;align-items:center;z-index:6;
+    animation:slideUp .34s cubic-bezier(.2,.7,.3,1) both}
+  .bar .score{flex:1 1 100%;font-size:.83rem;color:var(--mut);order:1}
+  .bar .score b{color:var(--accD);font-size:1rem}
+  .bar button{padding:10px 14px;border:0;border-radius:var(--r14);color:var(--txt);font-weight:800;font-size:.8rem;cursor:pointer;order:2;
+    background:linear-gradient(145deg,var(--surf1),var(--surf2));box-shadow:4px 4px 9px var(--shD),-4px -4px 9px var(--shL);transition:all .15s;font-family:inherit}
+  .bar button:active{transform:scale(.97);box-shadow:inset 3px 3px 7px var(--shD),inset -3px -3px 7px var(--shL)}
+  .bar .copy{color:var(--accD)}
+  .bar .fin{color:#fff;background:linear-gradient(145deg,#7a71ff,#5A50E0);box-shadow:4px 4px 10px var(--shD)}
+  .note{font-size:.77rem;color:var(--mut);margin:6px 0 0}
+  h2.sec{font-size:1rem;color:var(--accD);margin:6px 0 8px;letter-spacing:-.2px}
+  ul.tight li,ol.tight li{margin:5px 0;font-size:.9rem}
+  table.k{width:100%;border-collapse:separate;border-spacing:0;font-size:.84rem;border-radius:12px;overflow:hidden;
+    box-shadow:inset 2px 2px 6px var(--shD),inset -2px -2px 6px var(--shL)}
+  table.k td,table.k th{padding:8px 10px;text-align:left}
+  table.k tr+tr td{border-top:1px solid rgba(163,177,198,.35)}
+  .toast{position:fixed;left:50%;bottom:110px;transform:translateX(-50%);background:var(--txt);color:#fff;padding:11px 18px;border-radius:var(--rpill);
+    font-weight:700;font-size:.84rem;display:none;z-index:9;max-width:86vw;text-align:center;box-shadow:6px 6px 16px var(--shD);animation:slideUp .3s cubic-bezier(.2,.7,.3,1) both}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes secIn{from{opacity:0}to{opacity:1}}
+  @keyframes slideUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  :where(nav button,button):focus-visible{outline:2px dashed var(--acc);outline-offset:3px}
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .card,.q{opacity:1}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo"><span>🎓 Latihan TKA 2026 · B. Indonesia</span></div>
+  <p>Prediksi berbasis kerangka Pusmendik (Perkaban BSKAP 045/H/AN/2025) · bukan bocoran</p>
+  <p><b>TKA 26–29 Okt · Senin: B.Indonesia sesi 1 (07.00–08.45)</b></p>
+</header>
+
+<nav>
+  <button id="t-m" class="on" onclick="tab('m')">📘 Materi</button>
+  <button id="t-a" onclick="tab('a')">📝 Simulasi 1</button>
+  <button id="t-b" onclick="tab('b')">📝 Simulasi 2</button>
+</nav>
+
+<main>
+<section id="tab-m" hidden>
+  <div class="card" style="--i:0">
+    <h2 class="sec">📦 Bentuk soal — persis simulasi TKA real</h2>
+    <ul class="tight">
+      <li><b>Pilihan Ganda (PG)</b> — pilih satu jawaban paling tepat dari 5 opsi.</li>
+      <li><b>PGK – MCMA</b> — jawaban benar LEBIH DARI SATU; centang semuanya.</li>
+      <li><b>PGK – Kategori</b> — tabel pernyataan: tentukan Benar/Salah (atau Sesuai/Tidak Sesuai, Relevan/Tidak Relevan) untuk SETIAP baris; skor penuh hanya jika semua baris tepat.</li>
+      <li>Struktur real: <b>30 soal per paket</b> (teks informasi + fiksi), 75 menit, 3 kompetensi: Tekstual · Inferensial · Evaluasi-Apresiasi.</li>
+    </ul>
+  </div>
+  <div class="card" style="--i:1">
+    <h2 class="sec">🎮 Cara pakai app</h2>
+    <ul class="tight">
+      <li><b>Mode Ujian</b>: jawaban tidak dibenarkan sampai 💾 Selesai &amp; Rekap; pakai 🤔 Ragu (doubt) &amp; ⏭ Skip (lewati) seperti app CBT.</li>
+      <li><b>Mode Latihan</b>: PG langsung tahu benar/salah begitu di-tap; PGK lewat 🔑 Cek Kunci.</li>
+      <li>Setelah selesai: <b>📋 Salin jawaban buat chat</b> → paste ke chat untuk cross-check + skor rubrik.</li>
+    </ul>
+  </div>
+  <div class="card" style="--i:2">
+    <h2 class="sec">🧭 3 Kompetensi (dari kerangka resmi)</h2>
+    <ul class="tight">
+      <li><b>Pemahaman Tekstual (TERSURAT):</b> ide pokok, kerangka teks, data/angka, pernyataan sesuai, latar, watak, tujuan.</li>
+      <li><b>Pemahaman Inferensial (TERSIRAT):</b> hubungan antarparagraf, simpulan, makna kata/frasa/ungkapan, perubahan sikap tokoh.</li>
+      <li><b>Evaluasi &amp; Apresiasi (MENILAI):</b> kalimat efektif, judul, simpulan orang lain, majas, argumen lemah, program sesuai saran, nilai relevan.</li>
+    </ul>
+  </div>
+  <div class="card" style="--i:3">
+    <h2 class="sec">⚡ Teknik Cepat</h2>
+    <ol class="tight">
+      <li>Baca pertanyaan dulu → baca teks → jawab 3–4 soal sekaligus per stimulus.</li>
+      <li><b>Kerangka/penggalan teks:</b> pantau urutan gagasan tiap paragraf → pilih rangkaian yang paling utuh.</li>
+      <li><b>Hubungan antarparagraf:</b> lanjutan, bantahan, penyebab, atau contoh — deteksi kata penandanya.</li>
+      <li><b>PGK MCMA:</b> nilai tiap opsi satu per satu → tersurat / kebalikan / nyasar; hati-hati: satu opsi salah = salah total.</li>
+      <li><b>Opini vs fakta:</b> kata "menurut saya / seharusnya" = opini; angka & laporan = fakta.</li>
+      <li><b>Sikap tokoh berubah?</b> bandingkan tindakan awal vs akhir (2+ bukti).</li>
+      <li><b>Drama/petunjuk laku:</b> akhir adegan = kunci kelanjutan cerita.</li>
+      <li>TKA tanpa poin negatif → jangan kosongkan; tebak yang paling masuk akal.</li>
+      <li>Soal todo? sulit: 🤔 tandai → ⏭ lewati → kembali di menit 60–70.</li>
+    </ol>
+  </div>
+  <div class="card" style="--i:4">
+    <h2 class="sec">📅 Pengingat ujian</h2>
+    <ul class="tight">
+      <li>Senin 26 Okt: B.Indonesia · Selasa: B.Inggris · Rabu: Mat/Numerasi · Kamis: Sejarah + TJKT</li>
+      <li>Hadir 06.30 · sarapan ringan · kerjakan soal yang paling pasti dulu.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="tab-a" hidden></section>
+<section id="tab-b" hidden></section>
+</main>
+
+<div class="bar" id="bar-a" hidden></div>
+<div class="bar" id="bar-b" hidden></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Data Simulasi 1 v2 — pola REAL TKA B.Indo: 8 stimulus, 30 soal (PG + PGK-MCMA + PGK-Kategori) inline.
+// Kategori: axis=[lbl0,lbl1], abbr="**" dua huruf untuk salin-chat, rws=[{t, k:0|1}].
+const SET_A = [
+{
+judul:"Teks 1 · Teks Berita — PLTS Desa Sukamaju",
+teks:[
+"Jumat (16/10), pemerintah Desa Sukamaju bersama perusahaan energi terbarukan resmikan pembangkit listrik tenaga surya (PLTS) kapasitas 120 kilowatt-peak. Panel surya dipasang di atap balai desa, puskesmas, dan dua puluh rumah warga sehingga mampu melayani sekitar 350 rumah. Sebelumnya, listrik desa bergantung sepenuhnya pada jaringan yang kerap padam saat hujan deras sehingga usaha rumahan warga seperti menjahit dan membuat kerupuk sering terbatal.",
+"Kepala Desa Burhanuddin mengatakan pembangunan PLTS tidak membebani warga karena didanai program percepatan energi terbarukan kabupaten dan dana desa. \"Dayanya lebih stabil, tetapi tagihan warga justru turun hingga sepertiga,\" ujarnya. Selain menopang kebutuhan rumah tangga, tenaga yang dihasilkan juga menyalakan lemari penyimpan vaksin di puskesmas serta tiga proyektor di sekolah dasar desa. Bulan depan, tiga puluh rumah lagi akan terhubung ke jaringan tersebut."
+],
+soal:[
+{no:1,tag:"Tekstual",q:"Ide pokok wacana tersebut adalah ...",
+ o:["warga Desa Sukamaju memperbaiki kelistrikan desa melalui PLTS yang diresmikan bersama perusahaan energi terbarukan","warga Desa Sukamaju harus memasang sendiri panel surya di rumahnya","harga listrik desa naik karena kerja sama dengan perusahaan swasta","jaringan listrik daerah makin sering padam setelah PLTS beroperasi","panel surya hanya menguntungkan balai desa dan puskesmas"],
+ k:"A",b:"Gagasan utama: PLTS resmi memperbaiki kelistrikan desa. B, C, D, E bertentangan atau terlalu sempit."},
+{no:2,tag:"Tekstual",q:"Kapasitas PLTS yang diresmikan di Desa Sukamaju adalah ...",
+ o:["30 kilowatt-peak","120 kilowatt-peak","200 kilowatt-peak","350 kilowatt-peak","20 kilowatt-peak"],
+ k:"B",b:"Tersurat: \"kapasitas 120 kilowatt-peak.\" Angka 20 dan 350 berasal dari detail lain — jebakan angka."},
+{no:3,tag:"PGK · Tekstual",form:"kategori",q:"Tentukan Benar atau Salah setiap pernyataan berikut berdasarkan teks.",
+ axis:["Benar","Salah"],abbr:"BS",krow:[0,1,0],
+ rws:[
+  {t:"PLTS Desa Sukamaju berkapasitas 120 kilowatt-peak."},
+  {t:"Tagihan listrik warga naik hingga sepertiga."},
+  {t:"Tiga puluh rumah lagi akan terhubung ke jaringan bulan depan."}],
+ b:"Baris A Benar (tersurat), B Salah — teks menyebut tagihan TURUN sepertiga, dan C Benar (tiga puluh rumah). PGK-Kategori: nilai tiap baris satu per satu; satu baris salah = seluruh soal salah."},
+{no:4,tag:"Inferensial",q:"Simpulan yang tepat dari wacana mengenai warga Desa Sukamaju adalah ...",
+ o:["listrik desa kini sepenuhnya berasal dari panel surya","warga masih menanggung biaya pembangunan PLTS","pasokan listrik desa kini lebih stabil dengan biaya yang lebih rendah","jaringan PLN berhenti melayani Desa Sukamaju","perluasan sambungan listrik membebani dana desa"],
+ k:"C",b:"Teks: daya lebih stabil + tagihan turun sepertiga. A berlawanan (listrik campuran), B/D/E nyasar."}
+]
+},
+{
+judul:"Teks 2 · Cerpen — Dua Kursi di Teras",
+teks:[
+"Sore itu Randy baru tiba di pekarangan rumah neneknya di tepi sawah setelah dua tahun tidak berkunjung. Angin dari kebun mangga membawa aroma tanah basah yang baru disirami hujan. Di depan rumah, dua kursi besi tua yang biasa menjadi tempat duduk nenek di sore hari tersusun rapi; sarung kuning yang dilapiskan di atasnya sudah pudar warnanya.",
+"\"Nak... Randy?\" Nenek berhenti di ambang pintu sebelum akhirnya bergegas keluar. Ia menggenggam lengan Randy dengan dua tangan, seolah menggenggam hadiah yang sudah bertahun-tahun ditunggu. \"Kok kurus begini,\" katanya sambil mengusap lengan cucunya.",
+"Petang itu, di meja kayu tua, Nenek menyajikan ikan bandeng, sambal terasi, dan nasi yang masih mengepulkan uap. Randy menceritakan kota: kereta yang penuh sesak, pekerjaan yang menumpuk, kamar kecil yang ia sewa sendiri. Nenek mengangguk saja, sesekali menambahkan ikan ke piring Randy tanpa diminta.",
+"\"Pulang lagi ya, Nak. Nenek tak ke mana-mana,\" bisiknya saat mengantar Randy ke gerbang.",
+"Setelah langkah Randy menghilang di ujung jalan, Nenek tidak segera masuk. Ia kembali duduk di kursi besi di teras, memandang gerbang yang mulai gelap."
+],
+soal:[
+{no:5,tag:"Tekstual",q:"Latar tempat dan suasana wacana tersebut adalah ...",
+ o:["kota besar pada pagi hari yang sibuk dan panas","pedesaan pada sore pascahujan yang hangat dan intim","tepi pantai pada tengah hari yang ramai dan riuh","pegunungan pada malam hari yang dingin dan sunyi","perumahan elite pada malam hari yang mewah dan tenang"],
+ k:"B",b:"Bukti: \"tepi sawah\" + \"sore itu\" + \"tanah basah baru disirami hujan\"; suasana intim lewat peluk, makan bersama."},
+{no:6,tag:"Tekstual",q:"Watak tokoh Nenek terbaca dari tindakannya, yaitu ...",
+ o:["mudah marah dan emosional","keras kepala dan suka menuntut","penyayang dan penuh perhatian","penakut dan kurang percaya diri","bawel dan pendendam"],
+ k:"C",b:"Dua bukti tindakan: menambahkan ikan tanpa diminta; mengantar ke gerbang; duduk lama memandang gerbang."},
+{no:7,tag:"PGK · Inferensial",form:"kategori",q:"Tentukan Sesuai atau Tidak Sesuai setiap pernyataan berikut terhadap isi cerita.",
+ axis:["Sesuai","Tidak Sesuai"],abbr:"ST",krow:[0,1,0],
+ rws:[
+  {t:"Randy baru kembali ke desa setelah dua tahun tidak berkunjung."},
+  {t:"Nenek mengusir Randy keluar karena kecewa dengan kunjungannya."},
+  {t:"Pada petang itu Nenek menyajikan ikan bandeng, sambal terasi, dan nasi yang masih hangat."}],
+ b:"A Sesuai (tersurat paragraf 1); B Tidak Sesuai — Nenek justru begitu bahagia; C Sesuai (tersurat paragraf 3)."}
+,
+{no:8,tag:"Evaluasi",q:"Judul yang paling tepat untuk wacana tersebut adalah ...",
+ o:["Dua Kursi di Teras","Sawah saat Hujan","Kota yang Sibuk","Ikan Bandeng Sambal Terasi","Kereta yang Sesak"],
+ k:"A",b:"Kursi di teras memayungi awal dan akhir cerita; opsi lain hanya detail nyasar."}
+]
+},
+{
+judul:"Teks 3 · Dua Teks Berpendapat — Ponsel di Jam Belajar",
+teks:[
+"<b>Teks A — Larang Penuh, Sekarang Juga</b><br>Sejak Januari lalu, sekolah kami melarang murid membawa ponsel selama jam pelajaran. Dalam bulan pertama, para guru melaporkan kelas jauh lebih tertib, dan nilai ulangan umum naik dua belas persen dalam satu semester. Bagi saya, aturan itu merupakan penyelamat belajar: layar ponsel memang dipenuhi video pendek dan permainan yang membuat pelajar sulit fokus. Sekolah-sekolah yang belum menerapkan aturan serupa, saya yakin, berada dalam kondisi lebih gaduh dan lebih boros waktu belajar. Karena itu, larangan perlu diberlakukan di seluruh sekolah, bukan hanya di beberapa tempat.<br>— Nabila, ketua OSIS SMA Merdeka",
+"<b>Teks B — Melatih, Bukan Melarang</b><br>Kami memahami niat pengarang Teks A, tetapi larangan penuh justru menutup pintu belajar. Hasil survei kelas kami terhadap 320 pelajar menunjukkan 47 persen memakai ponsel untuk membaca buku elektronik, mencatat, dan membuka kamus pada jam belajar mandiri. Ponsel juga alat belajar. Pada masa kerja nanti, pelajar dituntut mampu mengatur waktu layar sendiri; kemampuan itu tidak muncul begitu saja, melainkan dilatih sejak di sekolah. Seharusnya sekolah menerapkan pembatasan terarah: ponsel boleh untuk aplikasi belajar, dilarang untuk hiburan, dengan pembatasi yang diawasi guru. Disiplin sejati berasal dari latihan, bukan dari larangan.<br>— Fajar, pelajar XI SMA Nusantara"
+],
+soal:[
+{no:9,tag:"Inferensial",q:"Persamaan dan perbedaan pandangan kedua pengarang adalah ...",
+ o:["keduanya sepakat membuang ponsel dari kehidupan pelagar","keduanya mengakui ponsel membuat pelajar sulit fokus, tetapi Teks A memilih larangan penuh, sedangkan Teks B menawarkan pembatasan terarah","keduanya berasal dari sekolah yang sama dengan aturan yang sama","keduanya menolak survei sebagai dasar kebijakan sekolah","keduanya menganggap para guru kurang mengawasi pelajar"],
+ k:"B",b:"Titik temu: keduanya mengakui dampak ponsel pada fokus; titik beda: larangan penuh (A) vs pembatasan terarah (B). Perbandingan dua teks = favorit TKA."},
+{no:10,tag:"PGK · Evaluasi",form:"mcma",q:"Kalimat mana saja yang merupakan OPINI? <i>(pilih semua jawaban yang benar)</i>",
+ o:["\"Bagi saya, aturan itu merupakan penyelamat belajar.\"","Nilai ulangan umum naik dua belas persen dalam satu semester.","\"Larangan penuh justru menutup pintu belajar.\"","Survei kelas terhadap 320 pelajar menunjukkan 47 persen memakai ponsel untuk membaca buku elektronik.","\"Disiplin sejati berasal dari latihan, bukan dari larangan.\""],
+ k:"ACE",b:"A, C, E memuat nilai dan penilaian pribadi (\"bagi saya\", \"justru\", \"sejati\"); B dan D berupa data yang dapat diverifikasi — fakta."},
+{no:11,tag:"Evaluasi",q:"Bagian Teks A yang argumennya paling lemah karena tidak didukung data adalah ...",
+ o:["laporan para guru bahwa kelas menjadi lebih tertib","kenaikan nilai ulangan umum dua belas persen dalam satu semester","pernyataan \"saya yakin\" bahwa sekolah lain lebih gaduh dan lebih boros waktu","penyebutan video pendek dan permainan yang membuat pelajar sulit fokus","usulan agar larangan berlaku di seluruh sekolah"],
+ k:"C",b:"Pengarang sendiri menandainya \"saya yakin\" tanpa data — klaim antarorrang tanpa bukti. A amatan, B data, D maklumat umum."},
+{no:12,tag:"Inferensial",q:"Sikap pengarang Teks A terhadap penggunaan ponsel pelajar adalah ...",
+ o:["mendukung larangan penuh di jam belajar dan mengusulkan aturan diberlakukan luas","menolak larangan karena mengutamakan kebebasan pelajar","netral dan hanya melaporkan data survei","khawatir larangan membuat pelajar kehilangan alat belajar","menyalahkan penyelenggara media sosial secara langsung"],
+ k:"A",b:"Kata \"penyelamat belajar\" + \"larangan perlu diberlakukan di seluruh sekolah\" = sikap mendukung penuh. C/D justru sikap Teks B/peneliti."}
+]
+},
+{
+judul:"Teks 4 · Artikel + Data — Kurang Tidur Pelajar",
+teks:[
+"Survei terhadap 1.200 pelajar kelas IX–XII di enam kota menunjukkan hanya 34 persen yang tidur delapan jam atau lebih per malam — durasi yang dianjurkan bagi remaja. Merajalelanya kebiasaan begadang itu erat kaitannya dengan penggunaan gawai hingga dini hari; jadwal les dan tugas yang menumpuk menjadi penyebab tambahan.",
+"Distribusi durasi tidur pelajar (persen): <b>kurang dari 6 jam = 41</b> · <b>6–7 jam = 25</b> · <b>8 jam atau lebih = 34</b> <i>(dibulatkan; sumber: survei ilustratif)</i>",
+"Kekurangan tidur mengakibatkan konsentrasi menurun pada pelajaran pagi, mudah tersinggung, dan daya tahan tubuh menurun sehingga pelajar lebih rentan sakit; dalam jangka panjang, daya ingat pun menurun. Pakar kesehatan menyarankan pelajar menetapkan jam tidur tetap, mematikan layar sekurang-kurangnya satu jam sebelum tidur, dan menghindari minuman berkafein pada petang."
+],
+soal:[
+{no:13,tag:"Tekstual",q:"Persentase pelajar yang tidur sesuai anjuran adalah ...",
+ o:["34 persen","43 persen","13 persen","86 persen","40 persen"],
+ k:"A",b:"\"Hanya 34 persen ... tidur delapan jam atau lebih\"; 41 = kelompok kurang-dari-6-jam."},
+{no:14,tag:"PGK · Tekstual",form:"mcma",q:"Pernyataan mana saja yang SESUAI dengan data tabel dan isi teks? <i>(pilih semua jawaban yang benar)</i>",
+ o:["Lebih banyak pelajar tidur kurang dari enam jam daripada rentang durasi lainnya.","Jumlah pelajar yang tidur sekurang-kurang delapan jam lebih besar daripada yang tidur 6–7 jam.","Seluruh pelajar mengakui memakai gawai hingga dini hari.","Teks mengaitkan kurang tidur jangka panjang dengan menurunnya daya ingat.","Pakar kesehatan menyarankan menambah minuman berkafein pada petang."],
+ k:"ABD",b:"A ✓ (41% kelompok terbesar), B ✓ (34 > 25), D ✓ (tersurat). C ekstrem (\"seluruh\"), E kebalikan (menghindari)."},
+{no:15,tag:"Tekstual",q:"Fungsi paragraf terakhir terhadap wacana tersebut adalah ...",
+ o:["mengulang data survei dengan kata-kata lain","menyajikan akibat kurang tidur sekaligus saran penyelesaian","membantah hasil survei pada paragraf pertama","memberikan contoh kasus pelajar tertentu","mengumumkan pelaksanaan riset lanjutan"],
+ k:"B",b:"Paragraf akhir menutup masalah: sebut akibat (konsentrasi, tersinggung, daya ingat) lalu saran pakar — pola penutup khas teks informasi."},
+{no:16,tag:"Inferensial",q:"Berdasarkan teks, penyebab utama kurang tidur pada pelajar adalah ...",
+ o:["mata pelajaran malam dari sekolah","tugas sekolah dan les yang menumpuk","kamar yang mencapai suhu panas","kebiasaan memakai gawai hingga dini hari","kebiasaan bangun subuh untuk persiapan sekolah"],
+ k:"D",b:"\"Erat kaitannya dengan penggunaan gawai hingga dini hari\" = penyebab utama; tugas/les penyebab tambahan."}
+]
+},
+{
+judul:"Teks 5 · Puisi — Sawah Ibu",
+teks:[
+"<b>Sawah Ibu</b><br><br>Ibu menusuk malam dengan sabit,<br>berkelip kunang-kunang di pinggir pematang.<br>Embun pagi berbisik kabar senang,<br>gabah menguning menanti dipangku.<br><br>Punggungnya menekuk seperti gerbang,<br>lewat gerbang itu fajar masuk ke rumah."
+],
+soal:[
+{no:17,tag:"Apresiasi",q:"Citraan yang dominan digambarkan puisi tersebut adalah ...",
+ o:["penglihatan","pendengaran","perabaan","penciuman","pengecapan"],
+ k:"A",b:"Gambaran mata dominan: berkelip kunang, \"menguning\", \"menekuk\", gerbang, fajar masuk."},
+{no:18,tag:"Inferensial",q:"Makna larik \"Ibu menusuk malam dengan sabit\" adalah ...",
+ o:["Ibu menyimpan sabit di dalam rumah setiap malam","Ibu menghunus pisau karena sedang marah","Ibu sedang mengayau tanaman liar di pekarangan","Ibu menceritakan kisah malam kepada anaknya","Ibu masih bekerja di sawah hingga larut malam"],
+ k:"E",b:"Kiasan: menusuk malam = memotong/menyarap sawah sampai malam; opsi lain terlalu harfiah."},
+{no:19,tag:"Apresiasi",q:"Majas personifikasi terdapat pada larik ...",
+ o:["\"Ibu menusuk malam dengan sabit\"","\"Embun pagi berbisik kabar senang\"","\"Punggungnya menekuk seperti gerbang\"","\"lewat gerbang itu fajar masuk ke rumah\"","\"berkelip kunang-kunang di pinggir pematang\""],
+ k:"B",b:"\"Embun berbisik\" = benda mati diberi perilaku manusia (personifikasi). A hiperbola/metafora; C simile; D metafora; E denotatif."},
+{no:20,tag:"Evaluasi",q:"Kesan yang terbaca dari puisi tersebut adalah ...",
+ o:["kekecewaan terhadap pemerintah desa","kekaguman terhadap ketekunan ibu yang bekerja demi keluarga","ketakutan menghadapi malam","kejenuhan dengan pekerjaan sawah","keheranan terhadap kunang-kunang"],
+ k:"B",b:"Gambar bekerja hingga malam + \"fajar masuk ke rumah\" → kekaguman pada pengorbanan ibu."}
+]
+},
+{
+judul:"Teks 6 · Ulasan Daring — Toko Komputer Maju Jaya",
+teks:[
+"<b>Dewi A.</b> — ★★★★★ — <i>Teliti dan bergaransi</i><br>Teknisi memeriksa mainboard laptop saya dengan sangat teliti. Garansi pengerjaan dihitung tiga puluh hari; bila kerusakan berulang, perbaikan kembali gratis.",
+"<b>Andre</b> — ★★★☆☆ — <i>Asri, tetapi antrean panjang</i><br>Antrean pengerjaan panjang: laptop saya selesai hampir tiga hari karena hanya ada dua teknisi utama. Datanglah pagi hari kalau ingin cepat dilayani konsultasinya.",
+"<b>Ita</b> — ★★★★☆ — <i>Sparepart bergaransi pabrik</i><br>Semua sparepart yang dipasang bergaransi pabrik sembilan puluh hari. Harganya memang lebih tinggi daripada toko umum di dekat pasar, tetapi kualitasnya tidak diragukan.",
+"<b>Bagus</b> — ★★★★☆ — <i>Transparan</i><br>Teknisi menyerahkan laporan pemeriksaan tertulis dan menjelaskan setiap langkah perbaikan dengan sabar sampai saya paham. Bawa catatan gejala rusaknya biar cepat dianalisis.",
+"<i>Ulasan dikutip dari laman ulasan daring toko komputer fiktif. Nama pengulas disamarkan.</i>"
+],
+soal:[
+{no:21,tag:"Tekstual",q:"Informasi yang disebutkan oleh lebih dari satu pengulas adalah ...",
+ o:["harga sparepart lebih terjangkau","antrean pengerjaan yang cepat","aspek garansi","laporan pemeriksaan tertulis","toko yang buka sampai malam"],
+ k:"C",b:"Dewi menyebut garansi pengerjaan 30 hari; Ita garansi pabrik 90 hari — dua pengulas. Lainnya hanya satu pengulas atau tidak ada."},
+{no:22,tag:"PGK · Tekstual",form:"mcma",q:"Manakah pernyataan yang SESUAI dengan ulasan-ulasan tersebut? <i>(pilih semua jawaban yang benar)</i>",
+ o:["Teknisi memeriksa barang dengan sangat teliti.","Antrean pengerjaan selalu cepat.","Sparepart yang dipasang bergaransi pabrik sembilan puluh hari.","Pengerjaan bisa menghabiskan waktu hampir tiga hari.","Harga semua jasa di toko itu paling murah di kota."],
+ k:"ACD",b:"A ✓ (Dewi), C ✓ (Ita), D ✓ (Andre). B kebalikan ulasan Andre; E tidak pernah disebut — jebakan ekstrem."},
+{no:23,tag:"Evaluasi",q:"Ulasan Andre memuat kalimat: \"Antrean pengerjaan panjang, laptop saya selesai hampir tiga hari.\" Perbaikan yang paling efektif adalah ...",
+ o:["Karena antrean pengerjaannya panjang, laptop saya baru selesai tiga hari kemudian.","Karena antrean pengerjaannya panjang, sehingga laptop saya baru selesai tiga hari kemudian.","Antrean pengerjaan panjang dikarenakan laptop saya baru selesai tiga hari kemudian.","Laptop saya antrean pengerjaan panjang, karena baru selesai tiga hari kemudian.","Karena panjangnya antrean pengerjaan, laptop saya selesai dikerjakan selama tiga puluh hari."],
+ k:"A",b:"A hun: hubungan sebab-akibat rapi, \"tiga hari kemudian\" logis. B karena+sehingga; C terbalik; D SPK kacau; E tercampur angka garansi 30 hari."}
+]
+},
+{
+judul:"Teks 7 · Naskah Drama — Peta Sebelum Berangkat",
+teks:[
+"*(Teras rumah, malam. Di meja kayu tersusun brosur magang dan secarik formulir. Dandi, kelas XII TJKT, masuk membawa map biru.)*",
+"<b>Dandi:</b> Pa, seleksi magang PT Andalan Jaringan di Bandung sudah dibuka. Enam bulan, ada sertifikasi kompetensi di akhir program. Perusahaan itu punya laboratorium transceiver yang lengkap.",
+"<b>Hendra:</b> *(menaruh cangkir, tidak menatap Dandi)* Bandung? Kan tempat lain serupa, Bengkel Tirta dekat pasar, cuma empat puluh menit dari rumah. Sertifikatnya juga dilegal, katanya.",
+"<b>Dandi:</b> *(duduk di samping ayahnya)* Bengkel Tirta bagus untuk elektronika dasar, Pa. Tapi mimpi saya jaringan long-haul. Di PT Andalan, koordinator magangnya alumni sekolah kita. Asrama disediakan; makan tidak mahal. Anggaran saya sudah saya hitung.",
+"<b>Hendra:</b> Bukan soal jarak saja, Dandi. Kamu belum pernah tinggal sendiri, dan bus ke sana tidak setiap jam, kamu tahu sendiri.",
+"<b>Dandi:</b> Aku tahu, Pa. Karena itu aku siapkan semuanya dengan rinci; jadwal bus pagi tersedia sepanjang hari. Kalau ada masalah, ada wali magang yang bisa dihubungi. Yang aku minta bukan izin tanpa bicara; aku minta Ayah ikut menimbang bersama.",
+"<b>Hendra:</b> *(diam sejenak, membalik brosur Bengkel Tirta lalu membalik kembali brosur PT Andalan)* Enam bulan itu bukan lama sekali... tapi bukan singkat juga.",
+"<b>Dandi:</b> Dan kalau lulus sertifikasi, Pa, pemula dengan sertifikat serupa diterima lebih cepat di perusahaan besar. Tadi kubaca di maklumat programnya.",
+"<b>Hendra:</b> *(mengambil formulir PT Andalan, memandang brosur Bengkel Tirta sekali lagi, lalu meletakkannya di dasar tumpukan)* Berangkatnya ke Bandung naik bus pagi mana yang aman? Lebih baik Ayah antar ke terminal subuh nanti saja."
+],
+soal:[
+{no:24,tag:"Inferensial",q:"Konflik utama dalam kutipan drama tersebut adalah ...",
+ o:["Dandi belum lolos seleksi magang PT Andalan Jaringan","sertifikat kompetensi tidak diakui perusahaan mana pun","perbedaan pilihan tempat magang: Dandi menginginkan PT Andalan di Bandung, Hendra menginginkan tempat dekat rumah","Hendra ingin Dandi berhenti sekolah dan bekerja penuh","PT Andalan memungut biaya magang secara tidak resmi"],
+ k:"C",b:"Inti tarik-menarik: almamater Network pusat vs bengkel 40 menit dari rumah; bukan uang gelap, bukan kelulusan."},
+{no:25,tag:"Tekstual",q:"Watak tokoh Dandi tergambar dari dialog dan petunjuk lakuannya, yaitu ...",
+ o:["malas dan pasrah menunggu keputusan orang lain","takut bersuara dan mudah melemah","sombong karena diterima magang bergengsi","berani mengambil peluang namun tetap santun dan menghargai ayah","pendendam dan suka menutupi fakta"],
+ k:"D",b:"Dua bukti: siapkan hitungan + minta ayah \"ikut menimbang bersama\"; santun via duduk di samping ayah, tidak membentak."},
+{no:26,tag:"Inferensial",q:"Berdasarkan petunjuk lakukan terakhir, kelanjutan cerita yang paling mungkin adalah ...",
+ o:["Hendra memaksa Dandi magang di Bengkel Tirta","Dandi membatalkan pendaftaran dengan diam-diam","Hendra menjual sepeda motornya demi biaya kuliah Dandi","Dandi berangkat malam itu juga tanpa pamit","Hendra menyetujui magang di Bandung dan mengantar Dandi ke terminal pagi"],
+ k:"E",b:"Hendra menyimpan brosur lokal + menanyakan bus pagi + tawaran mengantar terminal = restu. Petunjuk laku akhir = kunci kelanjutan."},
+{no:27,tag:"PGK · Apresiasi",form:"kategori",q:"Tentukan Relevan atau Tidak Relevan setiap pernyataan berikut terhadap nilai yang dapat diambil dari drama untuk kehidupan saat ini.",
+ axis:["Relevan","Tidak Relevan"],abbr:"RT",krow:[0,0,1],
+ rws:[
+  {t:"Komunikasi terbuka antara orang tua dan anak membantu keputusan besar tercapai."},
+  {t:"Program magang yang dipilih dengan pertimbangan matang memperbesar peluang kerja lulusan SMK."},
+  {t:"Anak sebaiknya menuruti seluruh keputusan orang tua tanpa menyampaikan pendapatnya."}],
+ b:"A dan B sejalan muatan drama (dialog dua arah + pertimbangan matang); C berlawanan dengan pesan drama — pendapat anak justru didengar."}
+]
+},
+{
+judul:"Teks 8 · Teks Prosedur — Meredakan Panas Laptop",
+teks:[
+"<b>Meredakan Panas Laptop: Empat Langkah Cepat</b><br>Ketika laptop tiba-tiba terasa panas dan kipasnya berdengung keras, jangan panik. Lakukan empat langkah berikut secara berurutan.",
+"Pertama, simpan pekerjaan, lalu matikan laptop dan tunggu sepuluh menit agar suhu turun. Kedua, bersihkan lubang ventilasi dan kipas dari debu memakai kuas kecil atau udara tekan yang disemprotkan perlahan. Ketiga, pindahkan laptop dari permukaan lembut seperti kasur atau sofa; letakkan di meja keras yang memungkinkan udara mengalir bebas. Terakhir, saat laptop digunakan kembali, tutup program yang tidak dipakai dan batasi aplikasi berat agar kerja komponen tidak menumpuk.",
+"Panas berlebih yang dibiarkan berlangsung lama dapat merusak baterai dan memperpendek usia perangkat."
+],
+soal:[
+{no:28,tag:"Tekstual",q:"Tujuan teks prosedur tersebut adalah ...",
+ o:["mengajak pembaca membeli laptop baru","menganjurkan pembelian pendingin khusus laptop","menjelaskan cara memperbaiki layar laptop yang rusak","memberikan langkah berurutan meredakan laptop yang terlalu panas","melarang pemakaian laptop saat cuaca panas"],
+ k:"D",b:"Judul + kalimat pengantar menyatakan tujuan tepat: empat langkah meredakan panas."},
+{no:29,tag:"Tekstual",q:"Urutan langkah yang benar sesuai teks adalah ...",
+ o:["membersihkan ventilasi → mematikan laptop → memindah ke meja keras → menutup aplikasi","menyimpan pekerjaan & mematikan laptop → membersihkan ventilasi → memindah ke meja keras → menutup aplikasi berat","memindah ke meja keras → membersihkan ventilasi → mematikan laptop → menutup aplikasi","menutup aplikasi berat → mematikan laptop → membersihkan ventilasi → memindah ke meja keras","mematikan laptop → memindah ke meja keras → menutup aplikasi → membersihkan ventilasi"],
+ k:"B",b:"Urutan teks: simpan+matikan → ventilasi → meja keras → tutup aplikasi; opsi lain menukar posisi langkah."},
+{no:30,tag:"Inferensial",q:"Makna kata meredakan pada judul \"Meredakan Panas Laptop\" adalah ...",
+ o:["membasmi","menyekat","mengurangi","melindungi","menahan"],
+ k:"C",b:"Meredakan = menurunkan/mengurangi (bukan menghilangkan total); \"membasmi\" terlalu kuat."}
+]
+}
+];
+</script>
+<script>
+// Data Simulasi 2 v2 — pola REAL TKA B.Indo: 8 stimulus, 30 soal (PG + PGK-MCMA + PGK-Kategori) inline.
+// Kategori: axis=[lbl0,lbl1], abbr dua huruf buat salin-chat, krow=[0/1 per baris], rws=[{t}] teks saja.
+const SET_B = [
+{
+judul:"Teks 1 · Berita — Tim SMK Juara IoT Nasional",
+teks:[
+"Tim \"Triloka,\" terdiri atas tiga siswa kelas XII Teknik Jaringan Komputer dan Telekomunikasi SMKN 7 Purwokerto, menjadi juara pertama Lomba Karya IoT Pelajar Nasional 2026 yang digelar di Jakarta, Sabtu (18/10). Mereka membawa prototipe HidroGuard, sistem pemantauan irigasi berbasis mikrokontroler dengan sensor debit air, pH, dan kelembapan; datanya terkirim ke ponsel petani melalui jaringan seluler.",
+"Dalam uji coba dua minggu di persawahan warga, prototipe itu membantu menekan penggunaan air irigasi 25 persen. Petani tidak perlu berkeliling sawah; pemberitahuan otomatis muncul ketika aliran kurang atau tersekat. Hadiah yang dibawa tim berupa piala, sertifikat, dan uang pembinaan Rp25.000.000.",
+"Guru pembimbing, Pak Samudra, mengatakan tim akan memantapkan perangkat agar siap digunakan luas di petak-petak sawah desa sekitar sekolah."
+],
+soal:[
+{no:31,tag:"Tekstual",q:"Ide pokok wacana tersebut adalah ...",
+ o:["petani sawah kebingungan memakai teknologi seluler","sekolah merekrut siswa berprestasi khusus untuk lomba","tim siswa SMK menjuarai lomba IoT lewat alat pemantau irigasi pintar","pemerintah mendirikan pusat penelitian irigasi baru","air irigasi desa kian berkurang"],
+ k:"C",b:"Gagasan utama: keberhasilan tim SMK juara IoT dengan alat irigasi pintar; lainnya nyasar/tak disebut."},
+{no:32,tag:"Tekstual",q:"Dalam uji coba, prototipe membantu menekan penggunaan air irigasi sebesar ...",
+ o:["15 persen","35 persen","40 persen","25 persen","5,2 persen"],
+ k:"D",b:"Tersurat: \"menekan penggunaan air irigasi 25 persen\"; angka lain murni penggoda."},
+{no:33,tag:"PGK · Tekstual",form:"kategori",q:"Tentukan Benar atau Salah setiap pernyataan berikut berdasarkan teks.",
+ axis:["Benar","Salah"],abbr:"BS",krow:[0,1,0],
+ rws:[
+  {t:"Prototipe HidroGuard memiliki sensor debit air, pH, dan kelembapan."},
+  {t:"Uji coba prototipe berlangsung selama tiga bulan di persawahan."},
+  {t:"Hadiah tim berupa piala, sertifikat, dan uang pembinaan."}],
+ b:"A Benar (tersurat), B Salah — uji coba DUA MINGGU; C Benar. Satu baris salah = soal salah total; aturan penilaiannya sama dengan PGK asli."},
+{no:34,tag:"Evaluasi",q:"Judul berita yang paling tepat untuk wacana tersebut adalah ...",
+ o:["Air Irigasi Desa Tak Perlu Dijaga Lagi","Semua Pelajar SMK Menangkan Lomba Teknologi","Prototipe HidroGuard Menemani Petani Menjaga Sawah","Sertifikat Lomba untuk Pemerintah Desa","Petani Purwokerto Menang Kontes Pemantauan Air"],
+ k:"C",b:"Judul menangkap alat + manfaatnya bagi petani; A terlalu ekstrem, B overgeneralisasi, D/E menggeser subjek."}
+]
+},
+{
+judul:"Teks 2 · Cerpen — Helm Putih",
+teks:[
+"Setiap subuh, sebelum adzan berkumandang, bapak sudah berdiri di depan motor tua itu. Ia memeriksa rem, menggosok jok yang sudah licin, lalu mengenakan helm putih yang mulai menguning di bagian dagu. Aku sering tertidur lagi sebelum dengung motor itu benar-benar menjauh.",
+"Aku jarang melihat bapak di siang hari; ia pulang ketika langit senja sudah kemerahan.",
+"Suatu petang, ia membawa pulang sebuah kotak. Isinya sepasang sepatu sekolah baru untukku. \"Yang lama sudah bocor; nanti kakimu basah,\" katanya sambil menepuk-nepuk kotak itu.",
+"Sementara helm putih yang sudah licin dan menguning itu tak pernah ia ganti. \"Helm lama masih menepat,\" katanya sambil tersenyum.",
+"Aku memandang helm itu lebih lama dari biasanya. Warna kuningnya perlahan memudar, tetapi ia tetap melindungi setiap perjalanan.",
+"Seperti bapak, warnanya memudar, tetapi perannya tidak."
+],
+soal:[
+{no:35,tag:"Tekstual",q:"Latar waktu yang mendominasi kutipan cerpen tersebut adalah ...",
+ o:["tengah hari","larut malam","siang menjelang asar","subuh sebelum adzan berkumandang","dini hari saat hujan turun"],
+ k:"D",b:"Paragraf pembuka memfokuskan momen subuh; senja hanya disinggung sekali."},
+{no:36,tag:"Inferensial",q:"Watak tokoh bapak tergambar pada tindakan \"ia membawa pulang sebuah kotak... sepasang sepatu sekolah baru untukku\", yaitu ...",
+ o:["mudah mencemaskan","penyayang dan mengutamakan anak","suka berlebihan menabung","penghabis uang keluarga","tidak konsisten pada diri sendiri"],
+ k:"B",b:"Prioritas: sepatu anak diganti, helm sendiri dibiarkan — pengorbanan + kasih sayang wataknya."},
+{no:37,tag:"PGK · Inferensial",form:"kategori",q:"Tentukan Sesuai atau Tidak Sesuai setiap pernyataan berikut terhadap isi cerpen.",
+ axis:["Sesuai","Tidak Sesuai"],abbr:"ST",krow:[0,1,0],
+ rws:[
+  {t:"Aku sering tertidur lagi sebelum dengung motor bapak menjauh."},
+  {t:"Helm putih bapak selalu diganti setiap bulan dengan yang baru."},
+  {t:"Bapak pulang ketika langit senja sudah kemerahan."}],
+ b:"A Sesuai (tersurat), B Tidak Sesuai — helm justru TAK PERNAH diganti; C Sesuai (tersurat)."},
+{no:38,tag:"Inferensial",q:"Makna tersirat kalimat \"Seperti bapak, warnanya memudar, tetapi perannya tidak\" adalah ...",
+ o:["bapak berniat mengecat ulang helm agar tampak baru","wujud bapak menua, tetapi tanggung jawabnya tetap teguh","helm baru sudah dibeli untuk sang anak","bapak berhenti bekerja sebagai pengendara","helm tua disimpan hanya sebagai kenangan"],
+ k:"B",b:"Kiasan helm = bapak: badan menua, peran penjaga keluarga tak pudar; opsi lain terlalu harfiah."}
+]
+},
+{
+judul:"Teks 3 · Dua Teks Berpendapat — Bacaan Digital vs Cetak",
+teks:[
+"<b>Teks A — Manisnya Membaca Digital</b><br>Sebuah layar kecil kini menjadi pintu ribuan bacaan: berita, artikel, hingga buku elektronik. Akses mudah itulah keuntungan terbesar membaca digital; pembaca tidak perlu menunggu kiriman paket atau berjalan ke perpustakaan. Bagi saya, membaca digital itu teman yang setia: satu jempol cukup untuk membuka kamus, sekaligus menyimpan puluhan buku di dalam kantong. Potongan pendek pun tidak buruk; ia membuat orang yang tadinya malas membaca mulai menyukai huruf. Karena itu, sekolah tidak perlu melarangnya — cukup menyediakan daftar bacaan digital yang terkurasi.<br>— Bagas, pelajar XI",
+"<b>Teks B — Buku Cetak Melatih Ketekunan</b><br>Akses digital memang cepat. Meskipun demikian, riset menemukan banyak orang berhenti di sepertiga artikel panjang; pola bacaan menjadi seperti mengapung — mata bergerak cepat, tetapi sedikit yang dipahami. Buku cetak memaksa kita duduk tenang; halamannya tak pernah memunculkan notifikasi. Menurut saya, sekolah wajib menyediakan waktu membaca buku cetak tiga puluh menit sehari. Ketekunan tidak bisa dipinjam dari jendela layar; ia dirajut halaman demi halaman.<br>— Vina, ketua sasana baca"
+],
+soal:[
+{no:39,tag:"Inferensial",q:"Persamaan dan perbedaan pandangan kedua pengarang adalah ...",
+ o:["keduanya sepakat melarang ponsel di sekolah","keduanya setuju membaca itu penting; Teks A memuji kepraktisan layar, sedangkan Teks B mengedepankan ketekunan buku cetak","keduanya berasal dari organisasi sasana yang sama","keduanya menilai potongan pendek berbahaya","keduanya mengusulkan membaca tiga puluh menit sehari"],
+ k:"B",b:"Titik temu: sama-sama menghargai kebiasaan membaca; beda: kepraktisan digital (A) vs ketekunan cetak (B). D salah — A justru membela potongan pendek."},
+{no:40,tag:"PGK · Evaluasi",form:"mcma",q:"Kalimat mana saja yang merupakan OPINI? <i>(pilih semua jawaban yang benar)</i>",
+ o:["\"Bagi saya, membaca digital itu teman yang setia.\"","Banyak orang berhenti di sepertiga artikel panjang.","\"Ketekunan tidak bisa dipinjam dari jendela layar.\"","Pola bacaan menjadi seperti mengapung: mata bergerak cepat, sedikit yang dipahami.","\"Potongan pendek membuat orang yang tadinya malas mulai menyukai huruf.\""],
+ k:"ACE",b:"A, C, E penilaian pribadi pengarang; B dan D laporan riset yang dapat diverifikasi — fakta."},
+{no:41,tag:"Evaluasi",q:"Bagian Teks A yang argumennya paling lemah karena tidak didukung bukti adalah ...",
+ o:["satu jempol membuka kamus dan menyimpan puluhan buku","pembaca tak perlu menunggu kiriman paket ke rumah","potongan pendek membuat orang malas mulai menyukai huruf","sekolah menyediakan daftar bacaan digital terkurasi","akses bacaan tersedia di mana-mana"],
+ k:"C",b:"Klaim manfaat potongan pendek digembar-gemborkan tanpa data — dan berlawanan dengan temuan riset di Teks B."},
+{no:42,tag:"Inferensial",q:"Sikap pengarang Teks B terhadap bacaan digital adalah ...",
+ o:["mengakui aksesnya cepat, tetapi khawatir kebiasaan membaca sekilas terbentuk","menyambut penuh penawaran aplikasi bacaan","menilai manfaat digital tanpa syarat apa pun","menyerukan larangan total tanpa argumentasi","menganggap layar sama saja dengan buku cetak"],
+ k:"A",b:"Pengarang B memberi pengakuan (\"akses digital memang cepat\") lalu menaruh kekhawatiran; sikapnya berimbang siaga, bukan larangan total."}
+]
+},
+{
+judul:"Teks 4 · Artikel + Data — Kata Sandi yang Berantai",
+teks:[
+"Kebiasaan memakai satu kata sandi yang sama di banyak aplikasi terbukti berbahaya. Ketika data salah satu layanan bocor, pelaku tidak berhenti di sana; mereka mencoba sandi yang sama pada layanan lain dan menembus akun-akun milik orang yang sama — efek berantai seperti kartu domino.",
+"Hasil survei daring terhadap 800 pengguna pemula: <b>58 persen</b> memakai sandi yang sama di sekurang-kurangnya tiga aplikasi · <b>31 persen</b> mengaktifkan verifikasi dua langkah · <b>45 persen</b> memilih sandi pendek yang mudah diingat <i>(sumber: survei ilustratif)</i>.",
+"Karena itu, pengembang aplikasi menekankan dua kebiasaan sederhana: sandi unik dan panjang untuk tiap layanan serta verifikasi dua langkah yang menuntut kode tambahan ke ponsel milik kita sendiri. Pengelola sandi memudahkan menyimpan ratusan sandi tanpa perlu mengingat semuanya. Bila satu akun terbukti bocor, segera ganti sandinya dan periksa riwayat masuk."
+],
+soal:[
+{no:43,tag:"Tekstual",q:"Berdasarkan data dalam artikel, persentase pengguna yang mengaktifkan verifikasi dua langkah adalah ...",
+ o:["58 persen","45 persen","11 persen","31 persen","80 persen"],
+ k:"D",b:"Data: verifikasi dua langkah 31 persen; 58 = pemakai sandi sama, 45 = penggemar sandi pendek — waspada angka tertukar."},
+{no:44,tag:"PGK · Tekstual",form:"mcma",q:"Pernyataan mana saja yang SESUAI dengan data dan isi artikel? <i>(pilih semua jawaban yang benar)</i>",
+ o:["Lebih dari separuh responden memakai sandi yang sama di sekurang-kurangnya tiga aplikasi.","Verifikasi dua langkah sudah dipakai mayoritas responden.","Efek pembobolan akun digambarkan seperti kartu domino.","Artikel menganjurkan sandi unik dan panjang untuk tiap layanan.","Penggantian sandi cukup dilakukan sekali setiap lima tahun."],
+ k:"ACD",b:"A sesuai (58% = lebih dari separuh), C sesuai (tersurat), D sesuai (saran utama). B salah (31% bukan mayoritas); E kebalikan — segera bila bocor."},
+{no:45,tag:"Tekstual",q:"Fungsi paragraf terakhir terhadap artikel tersebut adalah ...",
+ o:["menyajikan data survei pendukung baru","menyajikan saran langkah untuk menanggulangi masalah","membantah isi paragraf pertama","menceritakan pengalaman pengembang aplikasi","mengumumkan tenggat penggantian sandi"],
+ k:"B",b:"Penutup berisi dua kebiasaan yang dianjurkan + tindakan bila bocor = saran penyelesaian; data justru di paragraf kedua."},
+{no:46,tag:"Inferensial",q:"Berdasarkan artikel, penyebab pelaku bisa menembus banyak akun sekaligus adalah ...",
+ o:["kebiasaan pengguna memakai sandi yang sama di beberapa layanan","kemampuan pelaku menebak sandi acak setiap waktu","seluruh layanan menyimpan sandi di tempat terbuka","pengembang aplikasi melarang penggantian sandi","verifikasi dua langkah sudah dipakai semua orang"],
+ k:"A",b:"Rantai berbahaya lahir dari kebiasaan sandi tunggal; opsi lain nyasar/berlawanan dengan saran artikel."}
+]
+},
+{
+judul:"Teks 5 · Puisi — Belum Usai",
+teks:[
+"<b>Belum Usai</b><br><br>Perahu kecil melaju membelah ombak,<br>dengung mesin mengiringi doa bapak.<br>Gemuruh air berdentang sampai bibir pantai,<br>namun tangan bapak teguh memegang kemudi.<br><br>Jala terentang menyambut gelombang,<br>laut memberi sesuai usaha.<br>Di dermaga, lampu menunggu fajar,<br>doa bapak tak pernah usai."
+],
+soal:[
+{no:47,tag:"Apresiasi",q:"Citraan yang dominan digambarkan puisi tersebut adalah ...",
+ o:["perabaan","penciuman","pendengaran","pengecapan","penglihatan"],
+ k:"C",b:"Bunyi mendominasi: dengung mesin, doa, gemuruh air \"berdentang\"; penglihatan hanya pelengkap."},
+{no:48,tag:"Inferensial",q:"Makna larik \"Jala terentang menyambut gelombang\" adalah ...",
+ o:["jala disimpan rapi di gudang","nelayan berhenti sementara melaut","jala dipinjam perahu tetangga","kesiapan nelayan menghadap kenyataan kerja laut","embun pagi membasahi jala tua"],
+ k:"D",b:"\"Menyambut gelombang\" = berani berhadapan dengan gelombang laut; diiringi \"laut memberi sesuai usaha\"."},
+{no:49,tag:"Apresiasi",q:"Pernyataan tentang majas yang tepat berdasarkan puisi tersebut adalah ...",
+ o:["\"Perahu kecil melaju membelah ombak\" memuat majas simile","\"Gemuruh air berdentang\" memuat majas repetisi","\"Jala terentang menyambut gelombang\" memuat majas simile","\"laut memberi sesuai usaha\" memuat majas hiperbola","\"Di dermaga, lampu menunggu fajar\" memuat majas personifikasi"],
+ k:"E",b:"\"Lampu menunggu\" — benda mati diberi perilaku manusia (personifikasi). Penandaan majas lain tidak equal dengan lariknya."},
+{no:50,tag:"Evaluasi",q:"Kesan dominan yang terbaca dari puisi tersebut adalah ...",
+ o:["keriuhan hari raya di desa nelayan","kekecewaan terhadap cuaca buruk","kejenuhan para pekerja laut","kegigihan dan harapan","kepanikan menghadapi gelombang besar"],
+ k:"D",b:"Kerja berat + doa yang \"tak pernah usai\" = gigih menggantung harapan."}
+]
+},
+{
+judul:"Teks 6 · Ulasan Daring — Kelas Simulasi Sertifikasi",
+teks:[
+"<b>Putri</b> — ★★★★★ — <i>Modulnya nyata pas</i><br>Modul simulasi kelas ini mirip soal sertifikasi asli. Mentor menjawab pertanyaan lewat forum tiap malam selama dua pekan; rekaman kelas tersedia untuk diakses satu tahun penuh.",
+"<b>Yoga</b> — ★★★☆☆ — <i>Bagus, waktunya sering lipat</i><br>Materinya bagus, tetapi jadwal mentor mundur beberapa kali sehingga kelas malam berpindah tiga kali. Bantuan teknis lewat nomor telepon juga jarang dijawab pada jam sibuk.",
+"<b>Nina</b> — ★★★★☆ — <i>Kuisnya langsung keluar nilai</i><br>Setiap akhir modul ada kuis kecil dan hasilnya langsung tampil, jadi saya tahu bagian mana yang masih lemah sebelum uji asli.",
+"<b>Tari</b> — ★★★★☆ — <i>Wajar untuk kualitasnya</i><br>Biaya kelas cukup terjangkau, hanya sedikit lebih tinggi daripada kelas video tanpa pendampingan. Pengeluaran ini sepadan dengan ilmu yang saya terima.",
+"<i>Ulasan dikutip dari laman kelas daring fiktif. Nama pengulas disamarkan.</i>"
+],
+soal:[
+{no:51,tag:"Tekstual",q:"Informasi yang disebutkan oleh lebih dari satu pengulas adalah ...",
+ o:["biaya kelas paling murah di kota","rekaman kelas diakses lima tahun","kuis di akhir setiap modul","peran mentor dalam kelas","garansi lulus uji sertifikasi"],
+ k:"D",b:"Putri: mentor menjawab tiap malam; Yoga: jadwal mentor mundur — dua pengulas. Lainnya hanya satu pengulas/tak disebut."},
+{no:52,tag:"PGK · Tekstual",form:"mcma",q:"Manakah pernyataan yang SESUAI dengan ulasan-ulasan tersebut? <i>(pilih semua jawaban yang benar)</i>",
+ o:["Modul simulasi disebut mirip soal sertifikasi asli.","Kelas malam pernah berpindah jadwal beberapa kali.","Seluruh pendaftar dijamin lulus uji sertifikasi.","Kuis di akhir modul menampilkan hasil secara langsung.","Biaya kelas jauh lebih murah daripada kelas video mana pun."],
+ k:"ABD",b:"A sesuai (Putri), B sesuai (Yoga), D sesuai (Nina). C jebakan kata \"dijamin\"; E kebalikan — justru sedikit lebih TINGGI."},
+{no:53,tag:"Evaluasi",q:"Ulasan Yoga memuat kalimat: \"Jadwal mentor mundur beberapa kali, kelas malam berpindah tiga kali.\" Perbaikan paling efektif menjadi kalimat efektif adalah ...",
+ o:["Karena jadwal mentor mundur sehingga kelas malam berpindah tiga kali.","Jadwal mentor mundur dikarenakan kelas malam berpindah tiga kali.","Karena jadwal mentor mundur beberapa kali, kelas malam berpindah tiga kali.","Jadwal mentor mundurnya beberapa kali berpindah tiga kali kelas malam.","Mundurnya jadwal mentor, merupakan sebab kelas malam berpindah tiga kali."],
+ k:"C",b:"C hubungan sebab-akibat rapi tanpa konjungsi ganda; A karena+sehingga; B terbalik; D/E strukturnya melantur dan mubazir."}
+]
+},
+{
+judul:"Teks 7 · Naskah Drama — Kartu untuk Gerobak",
+teks:[
+"*(Kios lumpia di pasar rakyat, siang. Gerobak tua Bu Sunarti berhias etalase. Rian — mahasiswa KKN bercelana lapangan — datang membawa map dan lembar kartu.)*",
+"<b>Rian:</b> Bu Sunarti, ini kartu pembayaran digitalnya. Soal langkahnya, coba dulu tiga kali bareng saya; nanti saya tinggalkan lembar panduan bergambar di rak gerobak.",
+"<b>Bu Sunarti:</b> *(mengusap tangannya ke kain celemek)* Rumit tuh, Mas. Saya juga khawatir saldo di ponsel kurang aman. Uang tunai saja sudah macet, kadang kembaliannya bingung dicari.",
+"<b>Rian:</b> Perhatian yang sehat, Bu. Karena itu langkahnya dibagi kecil-kecil: praktik pertama pakai nominal kecil, kedua Bu yang menekan tombolnya, ketiga Bu yang menghitung masuknya dana sendiri. Saldo bisa dilihat tiap malam sebelum tutup gerobak.",
+"<b>Bu Sunarti:</b> Kalau pembeli memakai kartu ini, uangnya masuk ke mana?",
+"<b>Rian:</b> Masuk ke rekening yang sudah Bu daftarkan. Di lembar panduan, jalannya uang saya gambar panah kecil, Bu, biar jelas.",
+"*(Seorang pembeli muda mendatangi gerobak, membuka ponsel.)*",
+"<b>Pembeli muda:</b> Bu, bisa bayar pakai kode QRIS? Aku jarang bawa uang tunai.",
+"<b>Bu Sunarti:</b> *(melirik Rian, menarik napas sekali, lalu tersenyum)* Dapat, Nak. Ajarkan sekali, Mas Rian, sebagai pengingat.",
+"<b>Bu Sunarti:</b> *(menggantung kartu QRIS ke tiang gerobak dengan tali kuning, lalu merapikan kain etalasenya)* Mulai besok, pembeli pakai kode itu saja; uang kembalian jadi kutabungkan untuk kegiatan pasar."
+],
+soal:[
+{no:54,tag:"Inferensial",q:"Konflik utama dalam kutipan drama tersebut adalah ...",
+ o:["Rian ingin memindahkan gerobak Bu Sunarti ke pasar besar","keraguan Bu Sunarti terhadap pembayaran digital dihadang ketekunan Rian mendampingi","pembeli muda menolak membayar dengan uang tunai","Mahasiswa KKN melarang pedagang menerima uang tunai","persaingan gerobak dengan kios tetangga yang lebih ramai"],
+ k:"B",b:"Tarik-menariknya bukan soal kios atau pembeli; isu utamanya keraguan Bu Sunarti (merasa rumit + takut saldo) dihadang pembinaan bertahap Rian."},
+{no:55,tag:"Tekstual",q:"Watak Bu Sunarti tergambar dari dialog dan petunjuk lakunya, yaitu ...",
+ o:["sombong dan menolak semua teknologi","pemarah dan mudah menyerah","hati-hati, tetapi terbuka belajar hal baru","malas dan menunggu bantuan orang lain","suka menunda pekerjaan dan berkata kasar"],
+ k:"C",b:"Bukti dua sisi: khawatir \"rumit\" + \"saldo kurang aman\" (hati-hati), namun mau belajar dan menggantung kartu (terbuka)."},
+{no:56,tag:"Inferensial",q:"Berdasarkan petunjuk laku terakhir, kelanjutan cerita yang paling mungkin adalah ...",
+ o:["pembayaran QRIS di gerobak Bu Sunarti makin lancar keesokan harinya","Bu Sunarti membuang kartu QRIS ke sungai belakang pasar","Rian berhenti KKN dan mengambil alih gerobak","ketua pasar melarang pembayaran digital","Bu Sunarti menutup gerobak duluan malam itu"],
+ k:"A",b:"Petunjuk laku penutup: kartu digantung + janji menabung kembalian = komitmen mulai memakainya; bukan perlakuan setahun sekali."},
+{no:57,tag:"PGK · Apresiasi",form:"kategori",q:"Tentukan Relevan atau Tidak Relevan setiap pernyataan berikut terhadap nilai yang dapat diambil dari drama untuk kehidupan saat ini.",
+ axis:["Relevan","Tidak Relevan"],abbr:"RT",krow:[0,0,1],
+ rws:[
+  {t:"Teknologi baru lebih mudah diterima bila pendampingannya dilakukan langsung dan bertahap."},
+  {t:"Pembayaran digital mempermudah pembeli yang jarang membawa uang tunai."},
+  {t:"Pedagang berusia lanjut sebaiknya menolak semua teknologi tanpa mencoba dulu."}],
+ b:"A dan B sejalan muatan drama (pendampingan bertahap + manfaat bagi pembeli muda); C berlawanan dengan pesan drama."
+}
+]
+},
+{
+judul:"Teks 8 · Teks Prosedur — Jadwal Belajar",
+teks:[
+"<b>Tiga Langkah Menyusun Jadwal Belajar yang Tak Berantakan</b><br><br>Pertama, catat seluruh tugas dan tenggat di satu buku kecil — satu tempat, jangan tersebar. Kedua, blok materi paling berat pada jam ketika pikiranmu paling segar; beri jeda lima menit setiap dua puluh lima menit agar otak tetap lapang. Ketiga, tiap akhir pekan, cermati tugas mana yang tertunda, lalu rapikan jadwal minggu berikutnya.",
+"Luangkan waktu sepuluh menit setiap malam untuk menata buku catatan tersebut — kebiasaan kecil yang membuahkan keteraturan besar."
+],
+soal:[
+{no:58,tag:"Tekstual",q:"Tujuan teks prosedur tersebut adalah ...",
+ o:["mengajak siswa membeli buku kecil berlabel mewah","menyuruh siswa belajar sepuluh jam tiap malam","memberikan langkah sederhana agar jadwal belajar tersusun rapi","melarang siswa menonton tayangan pendek saat belajar","menyarankan les privat bagi siswa kelas XII"],
+ k:"C",b:"Judul + tiga langkah → tujuan menata jadwal belajar; lainnya nyasar/terlalu jauh."},
+{no:59,tag:"Tekstual",q:"Urutan langkah yang tepat sesuai teks adalah ...",
+ o:["evaluasi akhir pekan → mencatat tugas → blok materi berat","mencatat seluruh tugas → blok materi berat dengan jeda lima menit → evaluasi tiap akhir pekan","blok materi berat → evaluasi akhir pekan → mencatat tugas","menata buku catatan → evaluasi akhir pekan → mencatat tugas","blok materi berat → mencatat tugas → evaluasi"],
+ k:"B",b:"Rangkaian teks: catat semua → blok materi berat (jeda) → evaluasi akhir pekan; opsi lain menukar posisi."},
+{no:60,tag:"Inferensial",q:"Makna kata meluangkan dalam \"Luangkan waktu sepuluh menit setiap malam...\" adalah ...",
+ o:["mengurangi waktu secara terus-menerus","membuang waktu percuma","menambah jam tidur","menghitung waktu dengan teliti","menyisihkan waktu secara khusus"],
+ k:"E",b:"Meluangkan = menyisihkan/mengalokasikan untuk keperluan khusus."}
+]
+}
+];
+</script>
+<script>
+const L='ABCDE';
+const state={a:{},b:{}}, mode={a:'ujian',b:'ujian'}, done={a:false,b:false};
+const sets={
+  a:{el:document.getElementById('tab-a'),data:SET_A,bar:document.getElementById('bar-a'),label:'A'},
+  b:{el:document.getElementById('tab-b'),data:SET_B,bar:document.getElementById('bar-b'),label:'B'}
+};
+function flat(set){const m=[];sets[set].data.forEach(w=>w.soal.forEach(q=>m.push({w,q})));return m;}
+function findQ(set,no){for(const it of flat(set))if(it.q.no===no)return it;return null;}
+function stof(set,no){return state[set][no]||(state[set][no]={p:[],s:false,r:false,rv:false});}
+function formOf(q){if(q.form)return q.form;if(q.krow)return 'kategori';return q.k.length>1?'mcma':'pg';}
+
+function tab(k){
+  ['m','a','b'].forEach(x=>{
+    document.getElementById('tab-'+x).hidden=(x!==k);
+    document.getElementById('t-'+x).classList.toggle('on',x===k);
+  });
+  if(k!=='m'){render(k);}
+  document.getElementById('bar-a').hidden=(k!=='a');
+  document.getElementById('bar-b').hidden=(k!=='b');
+  window.scrollTo(0,0);
+}
+
+function render(set){
+  const h=[];let i=0,last=null;
+  flat(set).forEach(it=>{
+    const isPgk=/PGK/.test(it.w.judul);
+    if(it.w.judul!==last){
+      last=it.w.judul;
+      h.push('<div class="card topic'+(isPgk?' pgk':'')+'" style="--i:'+i+'"><h3>'+it.w.judul+'</h3>');
+      it.w.teks.forEach(p=>h.push('<p>'+p+'</p>'));
+      h.push('</div>');i=Math.min(i+1,12);
+    }
+    h.push(qCardHTML(set,it.q,i));i=Math.min(i+1,12);
+  });
+  h.unshift(modeCardHTML(set));
+  sets[set].el.innerHTML=h.join('');
+  updBar(set);
+}
+
+function modeCardHTML(set){
+  return '<div class="card" style="--i:0"><div class="howbar">'
+    +'<button data-act="mode" data-m="ujian" class="'+(mode[set]==='ujian'?'on':'')+'">🎓 Mode Ujian</button>'
+    +'<button data-act="mode" data-m="latihan" class="'+(mode[set]==='latihan'?'on':'')+'">💡 Mode Latihan</button>'
+    +'</div><p class="howtxt">'
+    +(mode[set]==='ujian'
+      ?'🎙️ Mode Ujian: jawaban tidak langsung dibenarkan — pakai 🤔 Ragu & ⏭ Skip, lalu 💾 Selesai & Rekap.'
+      :'💚 Mode Latihan: PG langsung tahu hasil di-tap; PGK lewat tombol 🔑 Cek Kunci.')
+    +'</p></div>';
+}
+
+function qCardHTML(set,q,i){
+  const st=stof(set,q.no),f=formOf(q);
+  const pgkQ=/PGK/.test(q.tag);
+  let h='<div class="q'+(st.s&&f!=='kategori'&&st.p.length===0?' skipec':'')+'" data-set="'+set+'" data-no="'+q.no+'" style="--i:'+(i||0)+'">';
+  h+='<span class="chip'+(pgkQ?' pgkc':'')+'">'+q.tag+'</span><span class="qno">No. '+q.no+'</span>';
+  if(st.r)h+='<span class="badge ragu">🤔 RAGU</span>';
+  if(st.s)h+='<span class="badge skip">⏭ SKIP</span>';
+  h+='<div class="stem">'+q.q+'</div>';
+  if(f==='kategori'){
+    h+='<div class="kbk">Tentukan <b>'+axName(q,0)+'</b> / <b>'+axName(q,1)+'</b> untuk setiap pernyataan — skor penuh bila semua baris tepat.</div>';
+    q.rws.forEach((row,ri)=>{
+      const sel=st.p[ri]??-1;
+      let cls='row';
+      if(st.rv)cls+=(sel===q.krow[ri]?' ok':' no');
+      h+='<div class="'+cls+'"><div class="st">'+row.t+'</div><div class="ax">';
+      for(let a=0;a<2;a++){
+        let cx='';
+        if(st.rv){if(a===q.krow[ri])cx+=' goldx';if(sel===a)cx+=' sel';}
+        else if(sel===a)cx=' sel';
+        h+='<button data-act="row" data-r="'+ri+'" data-a="'+a+'"'+(st.rv?' disabled':'')+' class="'+cx.trim()+'">'+axName(q,a)+'</button>';
+      }
+      h+='</div></div>';
+    });
+  }else{
+    if(f==='mcma'&&!st.rv)h+='<div class="kbk">Pilih SEMUA jawaban benar — skor penuh hanya bila semua tepat.</div>';
+    const kIdx=q.k.split('').map(c=>L.indexOf(c));
+    q.o.forEach((t,oi)=>{
+      let c='opt';
+      if(st.rv){
+        if(kIdx.includes(oi))c+=' '+((f==='mcma'&&st.p.includes(oi))?'ok':'gold');
+        else if(st.p.includes(oi))c+=' no';
+      }else if(st.p.includes(oi))c+=' pick';
+      h+='<button class="'+c+'" data-act="opt" data-i="'+oi+'"'+(st.rv?' disabled':'')
+        +'><span class="key">'+L[oi]+'</span><span>'+t+'</span></button>';
+    });
+  }
+  if(!st.rv){
+    h+='<div class="actc">';
+    h+='<button data-act="ragu" class="'+(st.r?'onr':'')+'">'+(st.r?'🤔 Batal Ragu':'🤔 Ragu-ragu')+'</button>';
+    if(f!=='kategori')h+='<button data-act="skip" class="'+(st.s?'onsk':'')+'">'+(st.s?'↩ Un-skip':'⏭ Skip')+'</button>';
+    if(f==='mcma'&&mode[set]==='latihan')h+='<button data-act="cek" class="cek"'+(st.p.length?'':' disabled')+'>🔑 Cek Kunci</button>';
+    h+='</div>';
+  }
+  if(st.rv)h+='<div class="bahas"><b>Kunci: '+readK(q,f)+' — '+q.b+'</b></div>';
+  return h+'</div>';
+}
+function axName(q,a){return q.axis?q.axis[a]:(a===0?'Benar':'Salah');}
+function readK(q,f){
+  if(f==='kategori')return q.krow.map(k=>q.abbr[k]).join('');
+  return q.k;
+}
+
+function renderQ(set,no){
+  const card=sets[set].el.querySelector('.q[data-set="'+set+'"][data-no="'+no+'"]');
+  if(!card)return;
+  const it=findQ(set,no);
+  card.outerHTML=qCardHTML(set,it.q,it.i||0);
+  updBar(set);
+}
+
+function handleClick(e){
+  const t=e.target.closest('[data-act]');if(!t)return;
+  const act=t.dataset.act;
+  if(act==='mode'){setMode(t.closest('section').id.slice(-1),t.dataset.m);return;}
+  const qEl=t.closest('.q');if(!qEl)return;
+  const set=qEl.dataset.set,no=+qEl.dataset.no;
+  const it=findQ(set,no),q=it.q,st=stof(set,no),f=formOf(q);
+  if(act==='opt'){
+    if(st.rv)return;
+    const i=+t.dataset.i;
+    if(f==='mcma'){const x=st.p.indexOf(i);x<0?st.p.push(i):st.p.splice(x,1);st.s=false;}
+    else{st.s=false;st.p=(st.p[0]===i)?[]:[i];if(mode[set]==='latihan'&&st.p.length)st.rv=true;}
+    renderQ(set,no);
+  }
+  else if(act==='row'){
+    if(st.rv)return;
+    const ri=+t.dataset.r,a=+t.dataset.a;
+    st.p[ri]=(st.p[ri]===a?-1:a);
+    st.s=false;
+    if(mode[set]==='latihan'&&q.rws.length&&st.p.length===q.rws.length&&st.p.every(x=>x>=0))st.rv=true;
+    renderQ(set,no);
+  }
+  else if(act==='ragu'){st.r=!st.r;renderQ(set,no);}
+  else if(act==='skip'){st.s=!st.s;if(st.s)st.p=[];renderQ(set,no);}
+  else if(act==='cek'){
+    if(!st.p.length&&f!=='kategori'){toast('Pilih minimal satu opsi dulu');return;}
+    st.rv=true;renderQ(set,no);
+  }
+}
+function setMode(set,m){if(mode[set]!==m){mode[set]=m;done[set]=false;render(set);}}
+function finish(set){
+  if(done[set]){toast('Sudah selesai — pakai Salin jawaban atau Reset');return;}
+  if(!confirm('Selesaikan simulasi ini dan lihat rekap semua jawaban?'))return;
+  flat(set).forEach(it=>stof(set,it.q.no).rv=true);
+  done[set]=true;render(set);toast('Selesai! Skor + pembahasan siap 📊');window.scrollTo(0,0);
+}
+
+function stats(set){
+  let ben=0,sal=0,skp=0,rag=0,jaw=0;
+  flat(set).forEach(it=>{
+    const st=stof(set,it.q.no),q=it.q,f=formOf(q);
+    if(st.r)rag++;
+    if(f==='kategori'){
+      if(st.p.every(x=>x>=0)){
+        jaw++;
+        (q.krow.every((k,i)=>st.p[i]===k))?ben++:sal++;
+      }else if(st.s)skp++;
+    }else if(st.p.length){
+      jaw++;
+      const letters=st.p.slice().filter(x=>x>=0).sort((x,y)=>x-y).map(i=>L[i]).join('');
+      (letters===q.k)?ben++:sal++;
+    }else if(st.s)skp++;
+  });
+  return{ben,sal,skp,rag,jaw,tot:flat(set).length};
+}
+
+function updBar(set){
+  const s=sets[set],x=stats(set),d=done[set];
+  const span='<span class="score">';
+  const btns='<button class="copy" onclick="copyAns(\''+set+'\')">📋 Salin jawaban buat chat</button>'
+    +'<button onclick="resetSet(\''+set+'\')">↺ Reset</button>';
+  if(mode[set]==='ujian'&&!d){
+    const belum=x.tot-x.jaw;
+    s.bar.innerHTML=span+'Terjawab <b>'+x.jaw+'</b>/'+x.tot+' · Ragu <b>'+x.rag+'</b> · Belum <b>'+belum+'</b></span>'
+      +'<button class="fin" onclick="finish(\''+set+'\')">💾 Selesai & Rekap</button>'+btns;
+  }else{
+    s.bar.innerHTML=span+'Benar <b>'+x.ben+'</b>/'+x.tot+' · Salah <b>'+x.sal+'</b> · Skip <b>'+x.skp+'</b> · Ragu <b>'+x.rag+'</b></span>'+btns;
+  }
+}
+
+function copyAns(set){
+  const parts=flat(set).map(it=>{
+    const st=stof(set,it.q.no),q=it.q,f=formOf(q);
+    if(f==='kategori'){
+      if(!st.p.some(x=>x>=0))return it.q.no+'.'+(st.s?'S':'-');
+      return it.q.no+'.'+q.krow.map((k,i)=>st.p[i]>=0?(q.abbr||'BS')[st.p[i]]:'-').join('');
+    }
+    if(st.p.length)return it.q.no+'.'+st.p.filter(x=>x>=0).sort((x,y)=>x-y).map(i=>L[i]).join('');
+    return it.q.no+'.'+(st.s?'S':'-');
+  });
+  const txt=sets[set].label+': '+parts.join(' ');
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject())
+    .then(()=>toast('Jawaban tersalin! Paste ke chat ya'),()=>{prompt('Salin manual:',txt)});
+}
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg||'ok';t.style.display='block';
+  clearTimeout(toastT);toastT=setTimeout(()=>t.style.display='none',1800);
+}
+function resetSet(set){
+  if(!confirm('Hapus semua jawaban simulasi ini?'))return;
+  state[set]={};done[set]=false;render(set);toast('Direset — gas kerjain lagi');
+}
+
+sets.a.el.addEventListener('click',handleClick);
+sets.b.el.addEventListener('click',handleClick);
+</script>
+</body>
+</html>
