@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debug Click — Latihan TKA B.Indo</title>
+<style>
+body{font-family:system-ui,sans-serif;padding:16px;background:#e0e5ec;color:#2f3844}
+#dbglog{background:#fecaca;border:2px solid #c22237;padding:12px;border-radius:8px;font-family:monospace;font-size:12px;max-height:250px;overflow:auto;white-space:pre-wrap;margin-bottom:16px;line-height:1.4}
+.ok{color:#166534}.err{color:#991b1b}.inf{color:#4338ca}
+button{padding:8px 14px;margin:4px 4px 4px 0;cursor:pointer;font-size:14px;border:1px solid #9ca3af;border-radius:6px;background:#fff}
+button.on{border-color:#6c63ff;background:#6c63ff;color:#fff}
+.q{border:1px solid #cbd5e1;padding:10px;margin:8px 0;border-radius:8px;background:#fff}
+.opt{margin:4px;padding:6px 10px;border:1px solid #94a3b8;border-radius:6px;background:#f1f5f9;cursor:pointer}
+.opt.pick{background:#dbeafe;border-color:#6c63ff}
+#app{margin-top:16px}
+</style>
+</head>
+<body>
+<div id="dbglog"></div>
+<div id="nav">
+  <button onclick="tab('m')">Materi</button>
+  <button onclick="tab('a')">Simulasi 1</button>
+  <button onclick="tab('b')">Simulasi 2</button>
+</div>
+<section id="tab-m"><h2>Materi</h2><p>Ini tab materi.</p></section>
+<section id="tab-a" hidden></section>
+<section id="tab-b" hidden></section>
+<div class="bar" id="bar-a" hidden></div>
+<div class="bar" id="bar-b" hidden></div>
+<div id="toast" style="padding:8px;background:#22c55e;color:#fff;border-radius:6px;display:none"></div>
+
+<script>
+const dbg = (msg, cls='inf') => {
+  const el = document.getElementById('dbglog');
+  el.textContent += '[' + cls.toUpperCase() + '] ' + msg + '\n';
+};
+window.onerror = function(msg, url, line) {
+  dbg('JS ERROR: ' + msg + ' at ' + url.split('/').pop() + ':' + line, 'err');
+  return true;
+};
+window.onunhandledrejection = function(e) {
+  dbg('UNHANDLED REJECTION: ' + String(e.reason).slice(0, 150), 'err');
+};
+dbg('Page loaded, setting up...');
+</script>
+
+<script src="data-a.js"></script>
+<script src="data-b.js"></script>
+<script>
+try {
+  dbg('SET_A loaded: ' + (typeof SET_A !== 'undefined' ? SET_A.length + ' items' : 'UNDEFINED'), typeof SET_A !== 'undefined' ? 'ok' : 'err');
+  dbg('SET_B loaded: ' + (typeof SET_B !== 'undefined' ? SET_B.length + ' items' : 'UNDEFINED'), typeof SET_B !== 'undefined' ? 'ok' : 'err');
+
+  const L='ABCDE';
+  const state={a:{},b:{}}, mode={a:'ujian',b:'ujian'}, done={a:false,b:false};
+  const sets={
+    a:{el:document.getElementById('tab-a'),data:SET_A,bar:document.getElementById('bar-a'),label:'A'},
+    b:{el:document.getElementById('tab-b'),data:SET_B,bar:document.getElementById('bar-b'),label:'B'}
+  };
+  dbg('sets.a.el: ' + (sets.a.el ? 'found' : 'NULL'), sets.a.el ? 'ok' : 'err');
+  dbg('sets.b.el: ' + (sets.b.el ? 'found' : 'NULL'), sets.b.el ? 'ok' : 'err');
+
+  function flat(set){const m=[];sets[set].data.forEach(w=>w.soal.forEach(q=>m.push({w,q})));return m;}
+  function findQ(set,no){for(const it of flat(set))if(it.q.no===no)return it;return null;}
+  function stof(set,no){return state[set][no]||(state[set][no]={p:[],s:false,r:false,rv:false});}
+  function formOf(q){if(q.form)return q.form;if(q.krow)return 'kategori';return q.k.length>1?'mcma':'pg';}
+
+  function tab(k){
+    ['m','a','b'].forEach(x=>{
+      document.getElementById('tab-'+x).hidden=(x!==k);
+      document.getElementById('t-'+x).classList.toggle('on',x===k);
+    });
+    if(k!=='m'){render(k);}
+    document.getElementById('bar-a').hidden=(k!=='a');
+    document.getElementById('bar-b').hidden=(k!=='b');
+    window.scrollTo(0,0);
+  }
+
+  function render(set){
+    const h=[];let i=0,last=null;
+    flat(set).forEach(it=>{
+      const isPgk=/PGK/.test(it.w.judul);
+      if(it.w.judul!==last){
+        last=it.w.judul;
+        h.push('<div class="q topic'+(isPgk?' pgk':'')+'" style="--i:'+i+'"><h3>'+it.w.judul+'</h3>');
+        it.w.teks.forEach(p=>h.push('<p>'+p+'</p>'));
+        h.push('</div>');i=Math.min(i+1,12);
+      }
+      h.push(qCardHTML(set,it.q,i));i=Math.min(i+1,12);
+    });
+    h.unshift(modeCardHTML(set));
+    sets[set].el.innerHTML=h.join('');
+    updBar(set);
+  }
+
+  function modeCardHTML(set){
+    return '<div class="q" style="--i:0"><div class="howbar">'
+      +'<button data-act="mode" data-m="ujian" class="'+(mode[set]==='ujian'?'on':'')+'">🎓 Mode Ujian</button>'
+      +'<button data-act="mode" data-m="latihan" class="'+(mode[set]==='latihan'?'on':'')+'">💡 Mode Latihan</button>'
+      +'</div></div>';
+  }
+
+  function qCardHTML(set,q,i){
+    const st=stof(set,q.no),f=formOf(q);
+    let h='<div class="q" data-set="'+set+'" data-no="'+q.no+'" style="--i:'+(i||0)+'">';
+    h+='<span class="qno">No. '+q.no+'</span><div class="stem">'+q.q+'</div>';
+    if(f==='kategori'){
+      h+='<div>PGK: '+q.rws.map((r,ri)=>'<div>'+r.t+' <button data-act="row" data-r="'+ri+'" data-a="0">0</button><button data-act="row" data-r="'+ri+'" data-a="1">1</button></div>').join('')+'</div>';
+    }else{
+      const kIdx=q.k.split('').map(c=>L.indexOf(c));
+      q.o.forEach((t,oi)=>{
+        let c='opt';
+        if(st.p.includes(oi))c+=' pick';
+        h+='<button class="'+c+'" data-act="opt" data-i="'+oi+'"><span class="key">'+L[oi]+'</span><span>'+t+'</span></button>';
+      });
+    }
+    h+='<div class="actc"><button data-act="ragu">Ragu</button><button data-act="skip">Skip</button></div>';
+    return h+'</div>';
+  }
+
+  function renderQ(set,no){
+    const card=sets[set].el.querySelector('.q[data-set="'+set+'"][data-no="'+no+'"]');
+    if(!card){dbg('renderQ: card not found for '+set+'/'+no,'err');return;}
+    const it=findQ(set,no);
+    card.outerHTML=qCardHTML(set,it.q,it.i||0);
+    updBar(set);
+  }
+
+  function handleClick(e){
+    dbg('handleClick fired, target=' + (e.target ? e.target.tagName : 'null'), 'inf');
+    const t=e.target.closest('[data-act]');if(!t){dbg('no [data-act] ancestor','inf');return;}
+    const act=t.dataset.act;
+    dbg('act=' + act, 'inf');
+    if(act==='mode'){setMode(t.closest('section').id.slice(-1),t.dataset.m);return;}
+    const qEl=t.closest('.q');if(!qEl){dbg('no .q ancestor','inf');return;}
+    const set=qEl.dataset.set,no=+qEl.dataset.no;
+    const it=findQ(set,no),q=it.q,st=stof(set,no),f=formOf(q);
+    if(act==='opt'){
+      if(st.rv)return;
+      const i=+t.dataset.i;
+      if(f==='mcma'){const x=st.p.indexOf(i);x<0?st.p.push(i):st.p.splice(x,1);st.s=false;}
+      else{st.s=false;st.p=(st.p[0]===i)?[]:[i];if(mode[set]==='latihan'&&st.p.length)st.rv=true;}
+      renderQ(set,no);
+    }
+    else if(act==='row'){
+      if(st.rv)return;
+      const ri=+t.dataset.r,a=+t.dataset.a;
+      st.p[ri]=(st.p[ri]===a?-1:a);
+      st.s=false;
+      renderQ(set,no);
+    }
+    else if(act==='ragu'){st.r=!st.r;renderQ(set,no);}
+    else if(act==='skip'){st.s=!st.s;if(st.s)st.p=[];renderQ(set,no);}
+  }
+
+  function setMode(set,m){if(mode[set]!==m){mode[set]=m;done[set]=false;render(set);}}
+  function stats(set){
+    let ben=0,sal=0,skp=0,rag=0,jaw=0;
+    flat(set).forEach(it=>{
+      const st=stof(set,it.q.no),q=it.q,f=formOf(q);
+      if(st.r)rag++;
+      if(f==='kategori'){
+        if(q.rws.every((_,ri)=>(st.p[ri]??-1)>=0)){
+          jaw++;
+          (q.krow.every((k,i)=>st.p[i]===k))?ben++:sal++;
+        }else if(st.s)skp++;
+      }else if(st.p.length){
+        jaw++;
+        const letters=st.p.slice().filter(x=>x>=0).sort((x,y)=>x-y).map(i=>L[i]).join('');
+        (letters===q.k)?ben++:sal++;
+      }else if(st.s)skp++;
+    });
+    return{ben,sal,skp,rag,jaw,tot:flat(set).length};
+  }
+  function updBar(set){
+    const s=sets[set],x=stats(set);
+    s.bar.innerHTML='Terjawab <b>'+x.jaw+'</b>/'+x.tot+' · Benar <b>'+x.ben+'</b> · Salah <b>'+x.sal+'</b>';
+  }
+
+  sets.a.el.addEventListener('click',handleClick);
+  sets.b.el.addEventListener('click',handleClick);
+  dbg('Event listeners attached!', 'ok');
+  dbg('Ready. Click Simulasi 1 then tap an option.', 'inf');
+
+} catch(e) {
+  dbg('FATAL ERROR during setup: ' + e.stack, 'err');
+}
+</script>
+</body>
+</html>
