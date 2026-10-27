@@ -140,10 +140,6 @@
 </style>
 </head>
 <body>
-<div id="diaglog" style="position:fixed;top:10px;left:10px;right:10px;background:#fecaca;border:2px solid #c22237;padding:10px;border-radius:8px;font-family:monospace;font-size:12px;max-height:150px;overflow:auto;white-space:pre-wrap;z-index:9999;display:none"></div>
-<script>
-(function(){try{var log=document.getElementById('diaglog');window.onerror=function(m,u,l){log.style.display='block';log.textContent+='ERR '+m+'@'+u.split('/').pop()+':'+l+'\n';return true;};if(!Element.prototype.closest){Element.prototype.closest=function(s){var el=this;while(el){if(el.matches&&el.matches(s))return el;el=el.parentElement;}return null;};}log.style.display='block';log.textContent='Diag active. closest polyfill: '+(typeof Element.prototype.closest==='function')+'\n';}catch(e){}})();
-</script>
 <header>
   <div class="logo"><span>🎓 Latihan TKA 2026 · B. Indonesia</span></div>
   <p>Prediksi berbasis kerangka Pusmendik (Perkaban BSKAP 045/H/AN/2025) · bukan bocoran</p>
@@ -258,8 +254,8 @@ function render(set){
 
 function modeCardHTML(set){
   return '<div class="card" style="--i:0"><div class="howbar">'
-    +'<button data-act="mode" data-m="ujian" class="'+(mode[set]==='ujian'?'on':'')+'">🎓 Mode Ujian</button>'
-    +'<button data-act="mode" data-m="latihan" class="'+(mode[set]==='latihan'?'on':'')+'">💡 Mode Latihan</button>'
+    +'<button data-act="mode" data-set="'+set+'" data-m="ujian" class="'+(mode[set]==='ujian'?'on':'')+'">🎓 Mode Ujian</button>'
+    +'<button data-act="mode" data-set="'+set+'" data-m="latihan" class="'+(mode[set]==='latihan'?'on':'')+'">💡 Mode Latihan</button>'
     +'</div><p class="howtxt">'
     +(mode[set]==='ujian'
       ?'🎙️ Mode Ujian: 🤔 Ragu & ⏭ Skip hanya penanda — Selesai & Rekap aktif saat SEMUA soal sudah pakem (tanpa kosong/skip/ragu).'
@@ -328,12 +324,9 @@ function renderQ(set,no){
 }
 
 function handleClick(e){
-  var log=document.getElementById('diaglog');
-  if(log){log.style.display='block';log.textContent+='HC act? target='+ (e.target?e.target.tagName:'?')+'\n';}
-  const t=e.target.closest('[data-act]');if(!t){if(log){log.textContent+='HC no [data-act] ancestor\n';}return;}
+  const t=e.target.closest('[data-act]');if(!t)return;
   const act=t.dataset.act;
-  if(log){log.textContent+='HC act='+act+' data-act='+t.dataset.act+'\n';}
-  if(act==='mode'){setMode(t.closest('section').id.slice(-1),t.dataset.m);return;}
+  if(act==='mode'){setMode(t.dataset.set,t.dataset.m);return;}
   const qEl=t.closest('.q');if(!qEl){if(log){log.textContent+='HC no .q ancestor\n';}return;}
   const set=qEl.dataset.set,no=+qEl.dataset.no;
   const it=findQ(set,no),q=it.q,st=stof(set,no),f=formOf(q);

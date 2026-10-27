@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latihan TKA 2026 — Pilih Mapel</title>
+<style>
+  :root{
+    --bg:#E0E5EC;
+    --surf1:#E4EAF1; --surf2:#D9E0E9;
+    --inset:#D6DDE6;
+    --shL:rgba(255,255,255,.78);
+    --shD:rgba(163,177,198,.66);
+    --txt:#2F3844; --mut:#5B6470;
+    --acc:#6C63FF; --accD:#4A42CC;
+    --ok:#1F7A46; --r16:16px; --rpill:999px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:80px;}
+  header{padding:26px 16px 10px;text-align:center}
+  header h1{margin:0 0 6px;font-size:1.5rem;color:var(--accD);font-weight:800;letter-spacing:-.3px}
+  header p.sub{color:var(--mut);font-size:.92rem;margin:2px 0}
+  header p.jadwal{color:var(--accD);font-weight:700;font-size:.85rem;margin-top:8px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:10px 16px;max-width:660px;margin:0 auto}
+  .card{display:flex;flex-direction:column;align-items:flex-start;background:linear-gradient(145deg,var(--surf1),var(--surf2));
+    border-radius:var(--r16);padding:18px 16px;text-decoration:none;color:inherit;
+    box-shadow:6px 6px 12px var(--shD),-6px -6px 12px var(--shL);transition:transform .15s,box-shadow .15s}
+  .card:active{transform:scale(.97);box-shadow:inset 4px 4px 8px var(--shD),inset -4px -4px 8px var(--shL)}
+  .card h2{margin:0 0 8px;font-size:1.05rem;color:var(--accD)}
+  .card p.desc{margin:0 0 12px;font-size:.86rem;color:var(--mut);line-height:1.4}
+  .card .tag{margin-top:auto;font-size:.75rem;font-weight:800;color:var(--txt);text-transform:uppercase;letter-spacing:.5px}
+  .card.ok .tag{color:var(--ok)}
+  .card.coming{opacity:.72}
+  .card.coming .tag{color:var(--mut)}
+  footer{padding:26px 16px;text-align:center;font-size:.78rem;color:var(--mut)}
+  footer b{color:var(--accD)}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎓 Latihan TKA 2026</h1>
+  <p class="sub">Pilih mapel yang ingin kamu latihan</p>
+  <p class="jadwal">Jadwal: Senin B.Indo · <b>Selasa 27 Okt: B.Inggris 07.00–08.45</b> · Rabu Mat/Numerasi · Kamis Sejarah+TJKT</p>
+</header>
+<div class="grid">
+  <a href="web/index.html" class="card ok">
+    <h2>🇮🇩 B. Indonesia</h2>
+    <p class="desc">Simulasi 1 &amp; 2 · 30 soal/paket · PG + PGK-MCMA + PGK-Kategori · Mode Ujian &amp; Latihan · Salin jawaban buat chat</p>
+    <span class="tag">Tersedia ✅</span>
+  </a>
+  <a href="web/index.html" class="card">
+    <h2>🇬🇧 B. Inggris</h2>
+    <p class="desc">Simulasi persiapan ujian Selasa pagi · siap malam ini (jika sudah di-upload)</p>
+    <span class="tag">Siapkan</span>
+  </a>
+  <a href="#" class="card coming">
+    <h2>🔢 Matematika &amp; Numerasi</h2>
+    <p class="desc">Rabu 28 Okt</p>
+    <span class="tag">Coming Soon</span>
+  </a>
+  <a href="#" class="card coming">
+    <h2>📜 Sejarah + TJKT</h2>
+    <p class="desc">Kamis 29 Okt</p>
+    <span class="tag">Coming Soon</span>
+  </a>
+</div>
+<footer>
+  Latihan TKA 2026 · Prediksi berbasis kerangka resmi · bukan bocoran · <b>https://u-nyxx.github.io/TKA/</b>
+</footer>
+</body>
+</html>
