@@ -140,6 +140,10 @@
 </style>
 </head>
 <body>
+<div id="diaglog" style="position:fixed;top:10px;left:10px;right:10px;background:#fecaca;border:2px solid #c22237;padding:10px;border-radius:8px;font-family:monospace;font-size:12px;max-height:150px;overflow:auto;white-space:pre-wrap;z-index:9999;display:none"></div>
+<script>
+(function(){try{var log=document.getElementById('diaglog');window.onerror=function(m,u,l){log.style.display='block';log.textContent+='ERR '+m+'@'+u.split('/').pop()+':'+l+'\n';return true;};if(!Element.prototype.closest){Element.prototype.closest=function(s){var el=this;while(el){if(el.matches&&el.matches(s))return el;el=el.parentElement;}return null;};}log.style.display='block';log.textContent='Diag active. closest polyfill: '+(typeof Element.prototype.closest==='function')+'\n';}catch(e){}})();
+</script>
 <header>
   <div class="logo"><span>🎓 Latihan TKA 2026 · B. Indonesia</span></div>
   <p>Prediksi berbasis kerangka Pusmendik (Perkaban BSKAP 045/H/AN/2025) · bukan bocoran</p>
