@@ -328,10 +328,13 @@ function renderQ(set,no){
 }
 
 function handleClick(e){
-  const t=e.target.closest('[data-act]');if(!t)return;
+  var log=document.getElementById('diaglog');
+  if(log){log.style.display='block';log.textContent+='HC act? target='+ (e.target?e.target.tagName:'?')+'\n';}
+  const t=e.target.closest('[data-act]');if(!t){if(log){log.textContent+='HC no [data-act] ancestor\n';}return;}
   const act=t.dataset.act;
+  if(log){log.textContent+='HC act='+act+' data-act='+t.dataset.act+'\n';}
   if(act==='mode'){setMode(t.closest('section').id.slice(-1),t.dataset.m);return;}
-  const qEl=t.closest('.q');if(!qEl)return;
+  const qEl=t.closest('.q');if(!qEl){if(log){log.textContent+='HC no .q ancestor\n';}return;}
   const set=qEl.dataset.set,no=+qEl.dataset.no;
   const it=findQ(set,no),q=it.q,st=stof(set,no),f=formOf(q);
   if(act==='opt'){
